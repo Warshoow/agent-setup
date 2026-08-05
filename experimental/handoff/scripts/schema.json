@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "description": "Contrat de passation de contexte entre agents. Tout champ absent de ce schema est rejete a l'ecriture: le but est d'empecher le fourre-tout narratif.",
+  "fields": {
+    "agent": {
+      "type": "string",
+      "required": true,
+      "note": "Qui ecrit. Role plutot qu'identite: 'builder', 'reviewer', 'migrator'."
+    },
+    "task": {
+      "type": "object",
+      "required": true,
+      "fields": {
+        "title": { "type": "string", "required": true, "max_len": 120 },
+        "status": { "type": "enum", "required": true, "values": ["done", "partial", "blocked", "abandoned"] }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "required": true,
+      "max_len": 600,
+      "note": "Ce qui a change, en une a trois phrases. Pas de recit chronologique: le diff raconte deja l'histoire."
+    },
+    "decisions": {
+      "type": "array",
+      "required": false,
+      "item_fields": {
+        "what": { "type": "string", "required": true, "max_len": 300 },
+        "why": { "type": "string", "required": true, "min_len": 25 },
+        "alternatives_rejected": { "type": "array", "required": false, "of": "string" }
+      },
+      "note": "Le champ le plus precieux du handoff. Une decision sans 'why' est du bruit: l'agent suivant la reverra sans savoir qu'elle etait deliberee."
+    },
+    "failed_attempts": {
+      "type": "array",
+      "required": false,
+      "item_fields": {
+        "what": { "type": "string", "required": true, "max_len": 300 },
+        "why_failed": { "type": "string", "required": true, "min_len": 15 },
+        "dont_retry": { "type": "bool", "required": false, "default": false }
+      },
+      "note": "La connaissance la plus chere a reproduire, et celle qu'on perd systematiquement."
+    },
+    "invariants": {
+      "type": "array",
+      "required": false,
+      "item_fields": {
+        "claim": { "type": "string", "required": true, "max_len": 300 },
+        "scope": { "type": "string", "required": true, "note": "Chemin, module ou symbole concerne." }
+      },
+      "note": "Contraintes qu'un agent naif casserait sans le savoir."
+    },
+    "pointers": {
+      "type": "array",
+      "required": false,
+      "item_fields": {
+        "kind": { "type": "enum", "required": true, "values": ["file", "command", "url", "symbol"] },
+        "ref": { "type": "string", "required": true },
+        "why": { "type": "string", "required": true, "min_len": 10 }
+      },
+      "note": "Regle centrale du protocole: ce qui est re-derivable par un grep se stocke en pointeur, pas en fait recopie. Un fait recopie pourrit des que le code bouge."
+    },
+    "open_questions": {
+      "type": "array",
+      "required": false,
+      "item_fields": {
+        "id": { "type": "string", "required": false, "note": "Auto-assigne si absent." },
+        "question": { "type": "string", "required": true, "min_len": 15 },
+        "blocking": { "type": "bool", "required": false, "default": false }
+      }
+    },
+    "next_steps": { "type": "array", "required": false, "of": "string" },
+    "resolves": {
+      "type": "array",
+      "required": false,
+      "of": "string",
+      "note": "Ids de questions ouvertes tranchees par ce handoff. Rien n'est mute: la resolution est un nouvel evenement."
+    },
+    "supersedes": {
+      "type": "array",
+      "required": false,
+      "of": "string",
+      "note": "Ids de handoffs rendus obsoletes. Leurs decisions et invariants sortent de l'etat vivant."
+    },
+    "verified_by": {
+      "type": "array",
+      "required": false,
+      "of": "string",
+      "note": "Commandes reellement executees qui etayent le statut. 'ca devrait marcher' n'est pas une verification."
+    },
+    "confidence": { "type": "enum", "required": false, "values": ["high", "medium", "low"], "default": "medium" }
+  },
+  "cross_field_rules": [
+    "status=blocked exige au moins une open_question avec blocking=true",
+    "status=done exige au moins une entree dans verified_by",
+    "status=partial ou abandoned exige next_steps non vide",
+    "aucun champ texte ne peut contenir un bloc de code de plus de 5 lignes: pointer vers le fichier"
+  ]
+}
