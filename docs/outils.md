@@ -39,16 +39,6 @@ Exposé ici par `~/.local/bin/afk → ~/afk/afk.sh`, plus la skill
 
 Voir [skills.md](skills.md#graphify). Package pypi `graphifyy`, skill auto-installante.
 
-## claude-kit
-
-App desktop Tauri (à moi) qui gère une bibliothèque
-centrale de skills / commandes / agents / hooks / configs MCP, groupés en bundles,
-appliqués à un projet par symlinks dans son `.claude/`.
-
-Sa bibliothèque vit dans `~/.claude-assets/` (`library/` + `bundles/`, avec
-`.origins.json` qui trace d'où vient chaque asset importé). Géré par l'app,
-**pas versionné ici** — le repo claude-kit suffit.
-
 ## bin/
 
 | Script | Rôle |

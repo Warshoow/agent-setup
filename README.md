@@ -57,7 +57,7 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 - **[docs/design.md](docs/design.md)** — le stack design : impeccable, emil, taste-skill, ui-ux-pro-max — **et lesquels ne pas mélanger**.
 - **[docs/plugins.md](docs/plugins.md)** — plugins installés, marketplaces, versions.
 - **[docs/hooks.md](docs/hooks.md)** — les deux hooks, **et pourquoi `context-watch.sh` ne marchait pas**.
-- **[docs/outils.md](docs/outils.md)** — rtk, graphify, afk, claude-kit.
+- **[docs/outils.md](docs/outils.md)** — rtk, graphify, afk.
 - **[docs/devcontainers.md](docs/devcontainers.md)** — le pattern de mounts pour que les symlinks survivent dans un conteneur.
 
 ## Ce qui n'est PAS ici
@@ -69,7 +69,6 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 | `skills/graphify/` | skill tiers, s'auto-installe (`uv tool install graphifyy`) |
 | `plugins/cache/` | réinstallé depuis les marketplaces déclarées dans `settings.json` |
 | `projects/`, `sessions/`, `history.jsonl` | historique de travail, pas de la config |
-| `~/.claude-assets/` | bibliothèque de [claude-kit](https://github.com/Warshoow/claude-kit), gérée par l'app |
 | les noms de projets | anonymisés dans les fichiers de config publiés |
 
 ## Remonter la machine, en gros
