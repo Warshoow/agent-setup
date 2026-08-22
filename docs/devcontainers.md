@@ -6,8 +6,7 @@ disparaissent silencieusement**.
 
 La parade : bind-monter les cibles **au même chemin absolu** que sur l'hôte.
 
-Extrait de `~/projects-perso/Trainr/.devcontainer/devcontainer.json`, qui sert de
-référence à tous les autres projets :
+Extrait du `devcontainer.json` du projet qui sert de référence aux autres :
 
 ```jsonc
 "mounts": [
@@ -20,7 +19,7 @@ référence à tous les autres projets :
   "source=${localEnv:HOME}/.local/bin/claude,target=/usr/local/bin/claude,type=bind,readonly",
   "source=${localEnv:HOME}/.graphify-cache,target=/home/node/.graphify-cache,type=bind",
   // Vault Obsidian pour l'export graphify (OBSIDIAN_VAULT_PATH défini côté hôte)
-  "source=${localEnv:OBSIDIAN_VAULT_PATH},target=/workspaces/Trainr/vault,type=bind"
+  "source=${localEnv:OBSIDIAN_VAULT_PATH},target=/workspaces/<projet>/vault,type=bind"
 ],
 "remoteEnv": {
   "CLAUDE_CONFIG_DIR": "${localEnv:HOME}/.claude-perso",
@@ -41,4 +40,4 @@ Le dossier de config (`.claude-perso`) est monté **en écriture** : sessions,
 mémoire et plugins du travail fait dans le conteneur remontent sur l'hôte.
 
 L'agent [`devops`](../agents/devops.md) connaît ce standard et sait aligner un
-projet dessus (référence : Trainr).
+projet dessus, en diffant contre le projet de référence.

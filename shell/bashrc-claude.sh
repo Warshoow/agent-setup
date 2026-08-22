@@ -1,5 +1,5 @@
 # ─── Claude Code — à sourcer depuis ~/.bashrc ────────────────────────────────
-# (extrait de ~/.bashrc ; `install.sh` ajoute la ligne `source` qui va bien)
+# (extrait de ~/.bashrc, pour référence — à recoller à la main)
 
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 

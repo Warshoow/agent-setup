@@ -1,83 +1,85 @@
 # Le stack design
 
-Cinq skills + un plugin qui se recouvrent partiellement. **Le piège n'est pas de
-les installer, c'est de les faire tourner ensemble** : trois d'entre eux
-revendiquent la même décision (« quelle est l'esthétique de ce projet ? ») et se
-contredisent.
+Cinq skills tierces + un plugin + deux skills maison. Certaines se complètent,
+**trois se contredisent sur des points précis et vérifiables** — pas « en
+philosophie », sur la même police, la même courbe, le même fichier de tokens.
 
-Projet de référence : **`~/projects-perso/qr_code_project`** — impeccable + emil,
-avec un vrai design system committé.
+Ce document dit qui décide quoi, et pourquoi certaines paires produisent une UI
+qui se réécrit toute seule à chaque itération.
 
 ---
 
-## Le principe : un directeur, des satellites
+## Qui décide quoi
 
-```
-                   ┌─────────────────────────────┐
-   LE DIRECTEUR    │  décide l'esthétique         │   UN SEUL À LA FOIS
-   (choisir 1)     │  impeccable                  │   sur une même surface
-                   │  design-taste-frontend       │
-                   │  high-end-visual-design      │
-                   └─────────────────────────────┘
-                                 │
-   LES SATELLITES    ┌───────────┴───────────┐        cumulables sans risque
-   (cumuler)         │ emil-design-eng       │        avec n'importe quel
-                     │ ui-ux-pro-max         │        directeur
-                     └───────────────────────┘
-                                 │
-   LES TECHNIQUES    ┌───────────┴───────────┐        « comment on fabrique
-   (au besoin)       │ awwwards-motion-site  │        cet effet-là »
-                     │ cinematic-scroll-site │
-                     └───────────────────────┘
-```
+Le seul axe qui compte : **une skill décide-t-elle le système (palette, typo,
+échelle), ou l'affine-t-elle ?** Deux décideurs sur la même surface, et chaque
+passe défait la précédente.
 
-Un **directeur** pose le système : palette, typo, échelle, registre. Deux
-directeurs sur le même écran = deux systèmes qui se réécrivent l'un l'autre à
-chaque itération. Un **satellite** n'a pas d'avis sur le système, il l'affine
-(emil) ou lui propose des candidats (pro-max) — d'où l'absence de conflit.
+| | Skill | Décide le système ? |
+|---|---|:--:|
+| **Directeurs** | `impeccable` | ✅ et le committe sur disque |
+| | `design-taste-frontend` | ✅ par session |
+| | `high-end-visual-design` | ✅ et interdit le reste |
+| **Satellites** | `emil-design-eng` | ❌ mouvement uniquement |
+| | `ui-ux-pro-max` (la skill) | ❌ base de données consultable |
+| **Techniques** | `awwwards-motion-site`, `cinematic-scroll-site` | ❌ recettes d'effet |
+
+> ⚠️ Le **plugin** `ui-ux-pro-max` livre 7 skills, pas une. Trois d'entre elles
+> sont des décideurs déguisés. Voir la section dédiée — c'est le piège le moins
+> visible du lot.
 
 ---
 
 ## Les directeurs
 
-### impeccable — le seul qui tient un système dans le temps
+### impeccable
 
 [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable.style](https://impeccable.style/)
-
-C'est le plus lourd et le seul qui **persiste sur disque** :
-
-```
-PRODUCT.md            qui sont les users, quel registre (brand | product), la voix
-DESIGN.md             la palette et la typo committées, en OKLCH
-.impeccable/design.json   les tokens, rampes tonales, ombres — la source de vérité
-.agents/skills/impeccable/  la skill + ses ~25 références de sous-commandes
-```
-
-25 sous-commandes, chacune une passe étroite : `init` `audit` `craft` `shape`
-`polish` `critique` `typeset` `colorize` `layout` `distill` `bolder` `quieter`
-`overdrive` `delight` `harden` `optimize` `adapt` `onboard` `document` `extract`
-`live` `brand` `product` `interaction-design` `codex`.
-
-Deux registres, choisis par le projet : **brand** (le design EST le produit —
-landing, portfolio) vs **product** (le design SERT le produit — dashboard, outil).
-Cette distinction est le cœur du truc : c'est ce que les autres skills n'ont pas.
 
 ```bash
 npx impeccable install     # depuis la racine du projet
 /impeccable init           # écrit PRODUCT.md, propose DESIGN.md
 ```
 
-Flux habituel : `audit` (diagnostiquer) → `normalize`/`craft` (aligner) → `polish` (finir).
+Le seul qui **persiste sur disque**, et c'est toute la différence :
 
-Le mode `live` ouvre un navigateur et itère sur le DOM réel (`.impeccable/live/config.json`
-dit dans quel fichier injecter). Il y a aussi des hooks `hook-before-edit.mjs` qui
-interceptent les éditions — c'est intrusif, à savoir.
+```
+PRODUCT.md                users, registre (brand | product), voix, anti-références
+DESIGN.md                 palette + typo committées, en OKLCH
+.impeccable/design.json   tokens, rampes tonales, ombres — la source de vérité
+.impeccable/live/config.json  où injecter en mode live
+```
 
-> **Règle d'or d'impeccable : l'identité existante gagne.** S'il trouve des
-> couleurs de marque committées, il ne les remplace pas. C'est exactement ce que
-> `high-end-visual-design` piétine (voir plus bas).
+~25 sous-commandes, chacune une passe étroite : `init` `audit` `craft` `shape`
+`polish` `critique` `typeset` `colorize` `layout` `animate` `distill` `bolder`
+`quieter` `overdrive` `delight` `harden` `optimize` `adapt` `onboard` `document`
+`extract` `clarify` `live` `codex`.
 
-### design-taste-frontend — l'anti-slop one-shot
+**Le cœur du truc, c'est le registre.** `brand` (le design EST le produit) et
+`product` (le design SERT le produit) ne suivent pas les mêmes règles — dans la
+*même* skill. Exemple concret, la même police :
+
+| | brand.md | product.md |
+|---|---|---|
+| Inter | dans la **ban list** des « training-data defaults » | dans les **permissions** : « System fonts and familiar sans defaults (Inter, SF Pro, system-ui) » |
+| familiarité | « Restraint without intent now reads as mediocre. Go big or go home. » | « Familiarity is often a feature here. Consistency over surprise. » |
+
+Aucune des autres skills n'a cette bascule. C'est pour ça qu'elle tient dans le
+temps sur une UI produit là où les autres dérivent.
+
+**Sa règle de survie**, `brand.md` :
+
+> « The reflex-reject lists apply to **new design choices**. When the existing
+> brand has already committed to a font or a lane as part of its identity,
+> **identity-preservation wins**. »
+
+Retenir cette phrase : c'est elle qui est incompatible avec `high-end-visual-design`.
+
+Flux : `audit` (diagnostiquer) → `craft` / `polish`. Le mode `live` ouvre un
+navigateur et itère sur le DOM réel ; des hooks `hook-before-edit.mjs`
+interceptent les éditions — c'est intrusif, à savoir avant de l'activer.
+
+### design-taste-frontend
 
 [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) · [tasteskill.dev](https://www.tasteskill.dev/)
 
@@ -85,55 +87,84 @@ interceptent les éditions — c'est intrusif, à savoir.
 npx skills add https://github.com/Leonxlnx/taste-skill --skill design-taste-frontend
 ```
 
-Périmètre déclaré en toutes lettres : **landing pages, portfolios, redesigns.
-Pas les dashboards, pas les tableaux de données, pas l'UI produit multi-étapes.**
+Périmètre déclaré en tête de skill : **landing pages, portfolios, redesigns. Pas
+les dashboards, pas les tableaux de données, pas l'UI produit multi-étapes.**
 
-Sa force : la phase **« Design Read »** — avant toute ligne de code, il lit le
-brief (type de page, mots-vibes, références, audience, contraintes) et annonce en
-une ligne *« je lis ça comme : landing B2B pour acheteurs techniques, langage
-minimaliste type Linear »*. Puis il règle trois dials. Discipline anti-défaut
-explicite : pas de dégradé violet IA, pas de hero centré sur mesh sombre, pas de
-trois cartes égales, pas d'Inter + slate-900.
+Sa vraie valeur, c'est la phase **« Design Read »** : avant toute ligne de code,
+lire le brief (type de page, mots-vibes, références, audience, contraintes
+silencieuses) et l'annoncer en une ligne — *« je lis ça comme : landing B2B pour
+acheteurs techniques, langage minimaliste type Linear »*. Puis trois dials.
 
-Autres variantes du même repo : `gpt-taste` (pour Codex), `image-to-code`,
-`redesign-existing-projects`, `minimalist-ui`, `industrial-brutalist-ui`, `brandkit`.
+Le reste est une longue liste d'anti-clichés **avec chemin d'override explicite**,
+ce qui la rend moins brutale qu'elle n'en a l'air :
 
-### high-end-visual-design — le marteau
+- Inter « discouraged as default », override si le brief demande neutre / Linear / secteur public.
+- « THE LILA RULE » : pas de glow violet IA par défaut.
+- « PREMIUM-CONSUMER PALETTE BAN » : la palette beige+laiton+espresso est bannie par défaut sur les briefs premium, avec 7 familles de rechange et une **règle de rotation** (ne pas ressortir la même deux fois).
+- « COLOR CONSISTENCY LOCK » : un accent choisi vaut pour toute la page.
+- « SERIF DISCIPLINE » : serif très découragé par défaut.
+- « **One system per project.** Do not mix Fluent React with Carbon in the same tree. Do not import shadcn/ui components into a Material 3 app. »
 
-Même repo (`Leonxlnx/taste-skill`), install name `high-end-visual-design`.
+Cette dernière phrase est la sienne. Elle vaut aussi pour les skills elles-mêmes.
 
-Persona « Vanguard_UI_Architect », objectif « expérience d'agence à 150k$ ».
-Interdits durs : **Inter, Roboto, Arial, Open Sans, Helvetica bannis**, Lucide
-épais banni, bordures 1px gris bannies, `ease-in-out` banni. Un « moteur de
-variance » tire au sort un archétype (Ethereal Glass / Editorial Luxury / Soft
-Structuralism × Bento / Z-Axis Cascade / Editorial Split) pour ne jamais rendre
-deux fois la même page.
+Variantes du même repo : `gpt-taste` (Codex), `image-to-code`,
+`redesign-existing-projects`, `minimalist-ui`, `industrial-brutalist-ui`,
+`full-output-enforcement`, `brandkit`.
 
-Excellent sur une landing d'agence à faire péter. **Destructeur sur un produit
-existant** : il bannit la police que ton design system a committée.
+### high-end-visual-design
+
+Même repo, install name `high-end-visual-design`.
+
+Persona « Vanguard_UI_Architect », cible « expérience d'agence à 150k$ ». Deux
+mécaniques la distinguent :
+
+1. **La « ABSOLUTE ZERO DIRECTIVE »** — pas des recommandations, des échecs :
+   « If your generated code includes ANY of the following, the design instantly
+   fails ». **Polices bannies : Inter, Roboto, Arial, Open Sans, Helvetica.**
+   Plus Lucide épais, bordures 1px grises, `ease-in-out`, navbars sticky bord à bord.
+2. **La « Variance Mandate »** — « NEVER generate the exact same layout or
+   aesthetic twice in a row ». Elle tire au sort un archétype de vibe
+   (Ethereal Glass / Editorial Luxury / Soft Structuralism) × un archétype de
+   layout (Bento asymétrique / Z-Axis Cascade / Editorial Split).
+
+Redoutable sur une landing d'agence greenfield. **Structurellement inutilisable
+sur un projet qui a une identité** : « ne jamais refaire pareil » est la négation
+exacte de « identity-preservation wins ».
 
 ---
 
 ## Les satellites
 
-### emil-design-eng — la couche mouvement
+### emil-design-eng
 
-[emilkowalski/skills](https://github.com/emilkowalski/skills) · cours : [animations.dev](https://animations.dev/)
+[emilkowalski/skills](https://github.com/emilkowalski/skills) · cours [animations.dev](https://animations.dev/)
 
-La philosophie d'Emil Kowalski (Vercel, Linear ; auteur de sonner et vaul) sur le
-polish : animation, courbes d'easing, spring physics pour les gestes
-interruptibles, `:active` scale sur les boutons, `transform-origin` d'un popover
-calé sur son trigger, `prefers-reduced-motion`, n'animer que `transform` et
-`opacity`.
+```bash
+npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng
+```
 
-Il rend ses revues en **tableau Before / After / Why** — format imposé par la skill.
+La philosophie d'Emil Kowalski (Vercel, Linear ; auteur de `sonner` et `vaul`) :
+courbes d'easing, spring physics pour les gestes interruptibles, `:active` scale
+sur les boutons, `transform-origin` d'un popover calé sur son trigger,
+`prefers-reduced-motion`, n'animer que `transform` et `opacity`. Revue rendue en
+**tableau Before / After / Why**, format imposé par la skill.
 
-Pourquoi ça ne rentre pas en conflit : il ne choisit ni palette, ni typo, ni
-layout. Il arrive **après** le directeur et resserre les 200ms qui font que ça
-« feel right ». C'est le complément naturel d'impeccable, dont la section Motion
-est plus courte.
+**Nuance importante :** ce n'est *pas* un complément à un trou d'impeccable.
+impeccable couvre déjà le mouvement (`animate.md`, `interaction-design.md`,
+`polish.md`). Les deux se recouvrent et **divergent sur deux points** :
 
-### ui-ux-pro-max — la base de données ✅ installé
+| Point | impeccable | emil |
+|---|---|---|
+| springs | « Use bounce or elastic easing curves » est dans la liste des **erreurs** (« they feel dated ») | section entière « Spring Animations » : « springs feel more natural than duration-based animations » |
+| `ease-in` | reconnaît un usage légitime (effet de pic-fin : ease-in fait *paraître* la tâche plus courte) | « **Never** use ease-in for UI animations » |
+| tokens | `--ease-out-quart/quint/expo` | `--ease-out`, `--ease-drawer` (valeurs différentes) |
+
+Aucune de ces divergences n'est fatale — un spring critiquement amorti ne
+rebondit pas — mais l'agent qui charge les deux tranchera au hasard. **Décider
+une fois pour toutes : emil est l'autorité sur le mouvement, impeccable sur le
+reste.** Et n'importer qu'une seule échelle de tokens d'easing.
+
+### ui-ux-pro-max — attention, c'est 7 skills
 
 [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [ui-ux-pro-max-skill.com](https://ui-ux-pro-max-skill.com/)
 
@@ -142,103 +173,116 @@ est plus courte.
 /plugin install ui-ux-pro-max@ui-ux-pro-max-skill
 ```
 
-Installé en **v2.13.0 sur le compte perso** (déclaré dans `settings.perso.json`,
-donc restauré tout seul par `install.sh`). Nécessite Python 3 (scripts de
-recherche, stdlib seulement) — présent.
+Installé en **v2.13.0, compte perso** (déclaré dans `settings.perso.json`).
+Python 3 requis pour les scripts de recherche
+(stdlib seule). Coût : **~1 082 tokens always-on**, aucun hook, aucun agent,
+aucun serveur MCP enregistré.
 
-Ce n'est pas un directeur : c'est un **oracle consultable**. Une base locale de
-84 styles, 192 palettes, 74 pairings de polices, 192 types de produits, 98 règles
-UX, 104 icônes, 16 presets GSAP, 25 types de graphes, sur 22 stacks (React, Next,
-Vue, Nuxt, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, Compose,
-Angular, Laravel, Three.js…).
+Le plugin livre **sept** skills, et elles ne jouent pas le même rôle :
 
-Zéro conflit *par construction* : il propose des candidats, il n'impose pas de
-verdict. C'est le bon partenaire d'impeccable — il alimente le choix de palette
-et de typo, impeccable décide et le committe dans `DESIGN.md`.
+| Skill | on-invoke | Rôle | Avec un directeur |
+|---|--:|---|---|
+| `ui-ux-pro-max` | ~6.3k | la base : 84 styles, 192 palettes, 74 pairings, 119 règles UX, 105 icônes, 17 presets GSAP, 25 types de graphes, 22 stacks | ✅ **c'est celle qu'on veut** — elle propose, elle n'impose pas |
+| `design-system` | ~2.6k | architecture de tokens 3 couches (primitive→semantic→component), échelles typo/spacing | ❌ **doublon frontal** avec `DESIGN.md` + `.impeccable/design.json` |
+| `ui-styling` | ~3.8k | impose shadcn/ui + Radix + Tailwind comme LE stack | ⚠️ décide à la place du directeur ; et viole le « one system per project » de taste-skill si le projet n'est pas sur ce stack |
+| `brand` | ~1.1k | voix de marque, identité visuelle, style guides | ⚠️ recouvre `PRODUCT.md` (voix) et le registre `brand` |
+| `design` | ~4.7k | méga-skill : logos, CIP, slides, bannières, icônes, photos sociales — **nécessite `GEMINI_API_KEY`** | hors sujet ici |
+| `banner-design` | ~3.1k | bannières social/ads/print | recouvre `marketing-skills` |
+| `slides` | ~360 | présentations HTML + Chart.js | hors sujet |
+
+**Le problème pratique :** les descriptions de `ui-styling` et `design-system`
+sont larges (« Use when building user interfaces… », « Use for design tokens »).
+Elles se déclenchent sur exactement les mêmes prompts qu'impeccable. On croit
+consulter une base de données, on a invité trois décideurs de plus.
+
+> **En pratique :** garder le plugin pour `ui-ux-pro-max`, et quand la session
+> touche au design system, dire explicitement quelle skill on veut. Si les
+> collisions deviennent pénibles, `claude plugin disable` et copier la seule
+> skill `ui-ux-pro-max/` en skill de projet.
 
 ---
 
-## Les skills de technique
+## Les skills maison
 
-Ni directeurs ni satellites : elles décrivent **comment fabriquer un effet précis**.
-Trouvées dans `~/projects-perso/test-front/` (bacs à sable).
+Écrites pour reproduire un effet précis repéré sur un site. Archivées dans
+[`skills/`](../skills/) — **pas installées au niveau user** : elles sont trop
+spécifiques pour être always-on, on les copie dans le projet qui en a besoin.
 
 | Skill | Effet | Stack |
 |---|---|---|
-| `awwwards-motion-site` | landing éditoriale, accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D central | Next + Lenis + GSAP ScrollTrigger + R3F/Spline |
-| `cinematic-scroll-site` | le scroll scrube une caméra pré-rendue (le truc des pages produit Apple) | Next + Lenis + scrub `<canvas>` frame par frame |
+| [`awwwards-motion-site`](../skills/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, marquees, objet 3D central | Next ou HTML nu + Lenis + GSAP ScrollTrigger + R3F/Spline |
+| [`cinematic-scroll-site`](../skills/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (la technique des pages produit Apple) — avec `ScrollScrubScene.tsx`, `chapters.ts` et `extract-frames.sh` fournis | Next App Router + Lenis + scrub `<canvas>` |
 
-À sortir seulement quand la landing demande cet effet-là. Elles supposent une
-direction déjà posée.
+`cinematic-scroll-site` porte une observation qui vaut le détour : ces sites ne
+sont presque jamais de la 3D temps réel, c'est une vidéo pré-rendue scrubbée par
+la position de scroll — d'où le photoréalisme qui tourne sur un téléphone.
+
+```bash
+cp -r <ce-repo>/skills/awwwards-motion-site <projet>/.claude/skills/
+```
+
+Ce sont des **recettes de fabrication**, pas des directions artistiques : elles
+supposent qu'un directeur a déjà tranché la palette et la typo.
 
 ---
 
-## Ce qu'il ne faut PAS mélanger
+## Ce qu'il ne faut pas mélanger
 
-| Combinaison | Verdict | Pourquoi |
+| Combinaison | Verdict | Le point de rupture, concrètement |
 |---|---|---|
-| impeccable + emil | ✅ **recommandé** | emil ne touche pas au système, il resserre le mouvement. C'est le duo du qr_code_project. |
-| impeccable + ui-ux-pro-max | ✅ recommandé | pro-max propose, impeccable arbitre et committe. |
-| impeccable + **high-end-visual-design** | ❌ **jamais** | high-end bannit Inter et impose ses archétypes ; impeccable préserve l'identité committée. Ils se réécrivent en boucle. |
-| impeccable + design-taste-frontend | ⚠️ redondant | les deux font le « quel registre / quelle direction ». Le split brand/product d'impeccable couvre déjà le besoin. |
-| design-taste-frontend + high-end-visual-design | ❌ contradictoires | taste-skill dit « lis la salle, pas de défaut » ; high-end dit « toujours du premium d'agence ». Même repo, philosophies opposées. |
-| design-taste-frontend + emil / pro-max | ✅ | mêmes raisons que plus haut. |
-| high-end-visual-design sur une **UI produit** | ❌ | c'est une skill *brand*. Sur un dashboard elle produit du bruit. |
-| n'importe quel directeur sans `PRODUCT.md` | ⚠️ | impeccable refuse et renvoie vers `init` ; les autres devinent, donc dérivent d'une session à l'autre. |
+| impeccable + emil | ✅ **le duo de référence** | se recouvrent sur le mouvement ; trancher une fois : emil décide le mouvement, impeccable le reste |
+| impeccable + skill `ui-ux-pro-max` seule | ✅ | pro-max propose des candidats, impeccable arbitre et committe |
+| impeccable + `design-system` (du plugin) | ❌ | deux architectures de tokens sur le même projet, chacune se croyant la source de vérité |
+| impeccable + `ui-styling` (du plugin) | ⚠️ | impose shadcn/Radix/Tailwind quel que soit le stack réel |
+| impeccable **product** + high-end-visual-design | ❌ **jamais** | product.md autorise Inter ; high-end le déclare « instant fail ». Et « identity-preservation wins » vs « never the same twice » |
+| impeccable **brand** + high-end-visual-design | ❌ quand même | les deux bannissent Inter, donc l'accord est superficiel — mais deux ban lists différentes et deux moteurs de direction restent deux directeurs |
+| design-taste-frontend + high-end-visual-design | ❌ | même repo, thèses opposées : « lis la salle, override possible » vs « toujours du premium d'agence, aucun override ». Et taste dit lui-même « one system per project » |
+| impeccable + design-taste-frontend | ⚠️ redondant | le split brand/product d'impeccable couvre déjà le « quelle direction ». Deux ban lists de polices qui ne coïncident pas (taste bannit le serif par défaut ; impeccable/brand bannit les serifs *réflexes* — Playfair, Fraunces, Cormorant — mais encourage à chercher un vrai serif) |
+| high-end-visual-design sur une UI produit | ❌ | c'est une skill *brand*. Sur un dashboard, la « Variance Mandate » casse la cohérence écran à écran |
+| n'importe quel directeur sans `PRODUCT.md` | ⚠️ | impeccable refuse et renvoie vers `init`. Les autres devinent — donc dérivent d'une session à l'autre |
 
-**La règle courte :** un directeur par surface, choisi par le registre.
+**La règle courte :**
 
-- Il existe déjà un design system → **impeccable**, registre `product`.
-- Landing / portfolio one-shot, pas de système → **design-taste-frontend**.
-- Landing d'agence qui doit choquer, aucune contrainte de marque → **high-end-visual-design**, seul.
-- Dans tous les cas : **+ emil-design-eng + ui-ux-pro-max**.
+- Un design system existe déjà → **impeccable**, registre `product`.
+- Landing / portfolio one-shot, rien de committé → **design-taste-frontend**.
+- Landing greenfield qui doit choquer, zéro contrainte de marque → **high-end-visual-design**, seul.
+- Dans les trois cas : **+ emil-design-eng** (mouvement) **+ la skill `ui-ux-pro-max`** (catalogue).
+- Jamais deux directeurs sur la même surface. Jamais `high-end` sur un projet qui a une identité.
 
 ---
 
-## Comment c'est installé chez moi
+## Comment c'est installé
 
-**Par projet, pas au niveau user.** Contrairement aux skills de `~/skills/`, les
-skills design vivent dans le repo du projet — parce qu'elles écrivent des états
-(`DESIGN.md`, `.impeccable/`) qui appartiennent au projet.
+**Par projet, pas au niveau user** — contrairement aux skills de `~/skills/`.
+Raison simple : elles écrivent un état (`DESIGN.md`, `.impeccable/`) qui
+appartient au repo. Seul `ui-ux-pro-max` est un plugin user, parce qu'il ne
+persiste rien.
 
 ```
 <projet>/
 ├── PRODUCT.md              impeccable init
-├── DESIGN.md               impeccable init/document
+├── DESIGN.md               impeccable init / document
 ├── .impeccable/
 │   ├── design.json         tokens, rampes OKLCH, ombres
-│   └── live/config.json    où injecter en mode live
+│   └── live/config.json    point d'injection du mode live
 ├── .agents/skills/<nom>/   installation canonique (npx skills add / impeccable install)
 └── .claude/skills/<nom>/   copie lue par Claude Code
 ```
 
-État actuel :
-
-| Projet | impeccable | emil | taste | high-end |
-|---|:--:|:--:|:--:|:--:|
-| `qr_code_project` | ✅ | ✅ | — | — |
-| `WatchLaterAI` | ✅ | ✅ | ✅ | — |
-| `notion-todo` | ✅ | ✅ | ✅ | ✅ |
-| `adcom-project-next` | ✅ | ✅ | ✅ | ✅ |
-
-> `notion-todo` et `adcom-project-next` ont les quatre. C'est précisément la
-> combinaison à éviter : quatre directeurs, dont deux qui se contredisent. À
-> réduire à impeccable + emil (+ pro-max, maintenant global).
-
-`ui-ux-pro-max` est le seul du lot installé **en plugin user** : pas d'état par
-projet, donc rien à installer par repo.
+Les deux dossiers coexistent : `.agents/skills/` est la cible des installeurs npx
+(convention inter-outils), `.claude/skills/` est ce que Claude Code lit.
 
 ## Repartir de zéro sur un projet
 
 ```bash
 cd <projet>
-npx impeccable install                                              # le directeur
-npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng
-# ui-ux-pro-max est déjà là, c'est un plugin user
+npx impeccable install                                                       # le directeur
+npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng   # le mouvement
+# ui-ux-pro-max est déjà là (plugin user)
 claude
-> /impeccable init        # PRODUCT.md + DESIGN.md — à faire AVANT toute UI
-> /impeccable audit       # si le projet a déjà une UI
+> /impeccable init        # PRODUCT.md + DESIGN.md — AVANT toute UI
+> /impeccable audit       # si une UI existe déjà
 ```
 
-`/impeccable init` d'abord, toujours : les autres skills lisent `PRODUCT.md` pour
-savoir à qui elles parlent.
+`init` d'abord, toujours : les autres skills lisent `PRODUCT.md` pour savoir à
+qui elles parlent. Sans lui, chaque session redevine le public et le registre.

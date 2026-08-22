@@ -12,6 +12,23 @@ Source unique : `~/skills/`. Chaque compte y accède par un symlink
 | [`coach-craft`](../skills/coach-craft/SKILL.md) | Me colle le vocabulaire de design logiciel (deep module, seam, tracer bullet…) sur mon vrai code, au moment où le concept apparaît, jusqu'à ce que je l'emploie tout seul. Termes en anglais, explications en français. | auto (dès que je code/conçois/teste/revois) |
 | [`evolve`](../skills/evolve/SKILL.md) | Boucle **instinct → skill** : relit les mémoires de tous les projets (perso + pro), repère ce qui revient, propose de le promouvoir en skill dans `~/skills/`. Validation explicite avant création. | `/evolve` |
 
+### Design — archivées, pas installées
+
+| Skill | Ce que ça fait |
+|---|---|
+| [`awwwards-motion-site`](../skills/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D. Next/HTML + Lenis + GSAP + R3F |
+| [`cinematic-scroll-site`](../skills/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (technique des pages produit Apple). Livre `ScrollScrubScene.tsx`, `chapters.ts`, `extract-frames.sh` |
+
+Écrites pour reproduire un effet précis repéré sur un site. Trop spécifiques pour
+être always-on : on les copie dans le projet qui en a besoin.
+
+```bash
+cp -r <ce-repo>/skills/awwwards-motion-site <projet>/.claude/skills/
+```
+
+Le reste du stack design (impeccable, emil, taste-skill, ui-ux-pro-max) vit par
+projet — voir [design.md](design.md).
+
 `audit-360` et `checkpoint` ont `disable-model-invocation: true` : elles ne se
 déclenchent qu'à la main.
 

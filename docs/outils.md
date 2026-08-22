@@ -41,7 +41,7 @@ Voir [skills.md](skills.md#graphify). Package pypi `graphifyy`, skill auto-insta
 
 ## claude-kit
 
-App desktop Tauri (à moi : `~/projects-perso/claude-kit`) qui gère une bibliothèque
+App desktop Tauri (à moi) qui gère une bibliothèque
 centrale de skills / commandes / agents / hooks / configs MCP, groupés en bundles,
 appliqués à un projet par symlinks dans son `.claude/`.
 
@@ -57,4 +57,4 @@ Sa bibliothèque vit dans `~/.claude-assets/` (`library/` + `bundles/`, avec
 | [`import-project.sh`](../bin/import-project.sh) | copie un dossier Windows → WSL en `rsync`, exclut `node_modules`/`vendor`/`.venv`/caches, remet des permissions saines et passe `.env` / clés / `*.pem` en `600` |
 
 Autres symlinks dans `~/.local/bin/` : `claude` (→ la version installée),
-`afk` (→ `~/afk/afk.sh`), `grab` (→ `~/projects-perso/grab-cli/grab`).
+`afk` (→ `~/afk/afk.sh`), `grab` (→ un CLI perso).

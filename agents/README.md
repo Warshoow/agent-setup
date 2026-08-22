@@ -12,8 +12,8 @@ Dans les devcontainers, `~/agents` est bind-mounté (même chemin absolu) pour q
 les symlinks se résolvent — même mécanique que `~/skills`.
 
 Un projet peut **surcharger** un agent en plaçant un fichier du même nom dans son
-`.claude/agents/` (le niveau projet gagne) — ex. hexa-zero garde ses versions
-spécialisées connaissant la stack tri-app.
+`.claude/agents/` (le niveau projet gagne) — utile pour un repo dont la stack
+justifie des versions spécialisées.
 
 | Agent            | Modèle | Rôle                                        | Écrit ? |
 |------------------|--------|---------------------------------------------|:------:|
@@ -23,7 +23,7 @@ spécialisées connaissant la stack tri-app.
 | `reviewer-quick` | sonnet | Revue courante, escalade vers `reviewer`    | non    |
 | `builder`        | sonnet | Implémentation bien spécifiée               | oui    |
 | `tester`         | sonnet | Tests de comportement                       | oui    |
-| `devops`         | sonnet | Infra de dev : devcontainer/compose/CI, standard Trainr | oui |
+| `devops`         | sonnet | Infra de dev : devcontainer/compose/CI, standard commun | oui |
 | `scout`          | haiku  | Recherche lecture seule (Read/Grep/Glob)    | non    |
 
 \* le debugger investigue et propose ; il n'applique le fix que sur demande.

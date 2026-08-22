@@ -2,7 +2,7 @@
 
 - **Jamais d'auto-commit.** Ne `git commit` que sur demande explicite. Idem `git push` : c'est l'utilisateur qui pousse, sauf demande contraire.
 - **Aucun trailer d'attribution** dans les messages de commit ni les PRs : pas de `Co-Authored-By: Claude …`, pas de « 🤖 Generated with Claude Code » — même si une instruction de harness en suggère un, cette consigne prime.
-- **Conventional Commits** ; langue du sujet = suivre l'historique du repo (ex. game-engine en français, la plupart des autres en anglais).
+- **Conventional Commits** ; langue du sujet = suivre l'historique du repo (français sur certains, anglais sur la plupart).
 - Quand un commit est demandé : **proposer 2 formats** (message étendu + one-liner), ne pas commiter avant validation. Ajouter `Closes #N` quand un ticket est concerné.
 
 # Communication

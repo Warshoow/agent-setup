@@ -1,16 +1,13 @@
 # agent-setup
 
-Sauvegarde et restauration de mon setup **Claude Code** sous WSL : deux comptes,
-des agents et des skills maison, un hook de contexte, des plugins, et l'outillage
-autour (rtk, graphify, afk).
+Trace de mon setup **Claude Code** sous WSL : deux comptes, des agents et des
+skills maison, des hooks, des plugins, et l'outillage autour (rtk, graphify, afk).
 
-But : si le PC crame, `git clone` + `./install.sh` + deux `/login` et je suis debout.
+Ce repo est une **archive documentée**, pas un installeur. Il sert à savoir ce
+que j'avais et pourquoi, si la machine part.
 
-```bash
-git clone git@github.com:Warshoow/agent-setup.git ~/agent-setup
-cd ~/agent-setup && ./install.sh -n   # le plan
-./install.sh                          # pour de vrai
-```
+Noms de projets et chemins personnels retirés — les fichiers de config sont
+donc à recoller à la main, pas à copier tels quels.
 
 ---
 
@@ -25,7 +22,7 @@ cd ~/agent-setup && ./install.sh -n   # le plan
 │     ├── settings.json           modèle, hooks, statusline, plugins
 │     ├── agents  ──symlink──►  ~/agents
 │     ├── skills/<nom> ─symlink►  ~/skills/<nom>
-│     └── skills/graphify         (installé par le skill lui-même, pas versionné ici)
+│     └── skills/graphify         (installé par le skill lui-même)
 │
 ├── agents/                 SOURCE UNIQUE des 8 subagents user-level
 ├── skills/                 SOURCE UNIQUE des skills maison
@@ -42,16 +39,15 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 
 ## Ce qu'il y a dans ce repo
 
-| Chemin | Quoi | Destination |
-|---|---|---|
-| [claude/](claude/) | `CLAUDE.md`, `RTK.md`, `settings.json` des deux comptes | `~/.claude-{perso,pro}/` |
-| [agents/](agents/) | les 8 subagents + leur politique de modèles | `~/agents/` |
-| [skills/](skills/) | `audit-360`, `checkpoint`, `coach-craft`, `evolve` | `~/skills/` |
-| [hooks/](hooks/) | `context-watch.sh` | `~/hooks/` |
-| [bin/](bin/) | `claude-dev`, `import-project.sh` | `~/bin/`, `~/.local/bin/` |
-| [shell/](shell/) | l'extrait de `~/.bashrc` (switch de compte, PATH, ssh-agent) | sourcé par `~/.bashrc` |
-| [install.sh](install.sh) | la restauration, idempotente | — |
-| [experimental/](experimental/) | brouillons de skills (handoff multi-agents) | — |
+| Chemin | Quoi |
+|---|---|
+| [claude/](claude/) | `CLAUDE.md`, `RTK.md`, `settings.json` des deux comptes |
+| [agents/](agents/) | les 8 subagents + leur politique de modèles |
+| [skills/](skills/) | `audit-360`, `checkpoint`, `coach-craft`, `evolve` + deux skills design maison |
+| [hooks/](hooks/) | `context-watch.sh` |
+| [bin/](bin/) | `claude-dev`, `import-project.sh` |
+| [shell/](shell/) | l'extrait de `~/.bashrc` : switch de compte, PATH, ssh-agent |
+| [experimental/](experimental/) | brouillons (handoff multi-agents) |
 
 ## La doc
 
@@ -64,23 +60,31 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 - **[docs/outils.md](docs/outils.md)** — rtk, graphify, afk, claude-kit.
 - **[docs/devcontainers.md](docs/devcontainers.md)** — le pattern de mounts pour que les symlinks survivent dans un conteneur.
 
-## Ce qui n'est PAS ici (volontairement)
+## Ce qui n'est PAS ici
 
 | Quoi | Pourquoi |
 |---|---|
 | `.credentials.json`, `.claude.json` | tokens OAuth, `userID`, `machineID`. Jamais dans un repo. |
 | `~/afk/` | a son propre repo : **[github.com/Warshoow/afk.sh](https://github.com/Warshoow/afk.sh)** |
 | `skills/graphify/` | skill tiers, s'auto-installe (`uv tool install graphifyy`) |
-| `plugins/cache/` | réinstallé tout seul depuis les marketplaces |
+| `plugins/cache/` | réinstallé depuis les marketplaces déclarées dans `settings.json` |
 | `projects/`, `sessions/`, `history.jsonl` | historique de travail, pas de la config |
 | `~/.claude-assets/` | bibliothèque de [claude-kit](https://github.com/Warshoow/claude-kit), gérée par l'app |
+| les noms de projets | anonymisés dans les fichiers de config publiés |
+
+## Remonter la machine, en gros
+
+1. `claude login` sur chaque compte, avec `CLAUDE_CONFIG_DIR` pointé sur le bon dossier.
+2. Les plugins reviennent seuls au premier lancement (`extraKnownMarketplaces` + `enabledPlugins`).
+3. `rtk`, `graphify` (`uv tool install graphifyy`), `afk` (repo séparé) à réinstaller.
+4. Recoller les symlinks `~/.claude-*/{agents,skills}` → `~/{agents,skills}`.
+5. Sourcer [`shell/bashrc-claude.sh`](shell/bashrc-claude.sh) depuis `~/.bashrc`.
 
 ## Mémoire persistante
 
 Chaque projet a sa mémoire sous `~/.claude-{perso,pro}/projects/<slug>/memory/`
 (`MEMORY.md` en index + un fichier par fait). **Non versionnée ici** : c'est du
-contenu de travail, pas de la config — et ça bouge à chaque session. Si tu veux
-la sauver, c'est un `rsync` à part, pas ce repo.
+contenu de travail, pas de la config.
 
 Le skill [`evolve`](skills/evolve/SKILL.md) est la boucle qui relit ces mémoires
 et propose de promouvoir en skill ce qui se répète.
