@@ -30,7 +30,8 @@
   "enabledPlugins": {
     "ponytail@ponytail": true,
     "mattpocock-skills@mattpocock": true,
-    "marketing-skills@marketingskills": true
+    "marketing-skills@marketingskills": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
@@ -50,11 +51,17 @@
         "source": "github",
         "repo": "coreyhaines31/marketingskills"
       }
+    },
+    "ui-ux-pro-max-skill": {
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
     }
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "theme": "dark",
-  "agentPushNotifEnabled": true,
-  "remoteControlAtStartup": false
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true
 }

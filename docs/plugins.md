@@ -11,6 +11,7 @@ partir des deux clés `extraKnownMarketplaces` et `enabledPlugins` du
 | `ponytail` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | 4.8.4 / 4.8.3 | ✅ | ✅ |
 | `mattpocock-skills` | [mattpocock/skills](https://github.com/mattpocock/skills) | 1.2.0 | ✅ | ✅ |
 | `marketing-skills` | [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | 2.9.0 | ✅ | — |
+| `ui-ux-pro-max` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 2.13.0 | ✅ | — |
 
 La marketplace officielle (`claude-plugins-official`) est présente dans les deux,
 auto-installée par Claude Code, sans plugin activé.
@@ -48,6 +49,13 @@ neuve par ticket.
 
 ~50 skills marketing (SEO, ads, copywriting, pricing, launch…). Compte perso
 uniquement, pour les projets produit.
+
+## ui-ux-pro-max (perso seulement)
+
+Base de données de design consultable — 84 styles, 192 palettes, 74 pairings de
+polices, 98 règles UX, sur 22 stacks. Ce n'est pas une skill qui décide, c'est un
+oracle. Voir [design.md](design.md) pour sa place dans le stack design et les
+combinaisons à éviter. Nécessite Python 3 (stdlib seule).
 
 ## Réglages communs aux deux comptes
 
