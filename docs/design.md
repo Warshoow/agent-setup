@@ -1,11 +1,26 @@
 # Le stack design
 
-Cinq skills tierces + un plugin + deux skills maison. Certaines se complètent,
-**trois se contredisent sur des points précis et vérifiables** — pas « en
-philosophie », sur la même police, la même courbe, le même fichier de tokens.
+Cinq skills tierces + un plugin + un MCP + deux skills maison.
 
-Ce document dit qui décide quoi, et pourquoi certaines paires produisent une UI
-qui se réécrit toute seule à chaque itération.
+**La répartition qu'on croit avoir est la bonne** : `impeccable` fait le gros du
+travail, `design-taste-frontend` apprend le goût et bloque le slop,
+`emil-design-eng` tient les transitions. Le partage des tâches est juste.
+
+Ce qui l'est moins, c'est d'en conclure qu'elles s'additionnent. Deux d'entre
+elles se prononcent sur les mêmes axes — police, couleur, layout — avec des
+listes qui ne coïncident pas. Voir [le verdict sémantique](#le-verdict-sémantique)
+et [lesquels garder](#lesquels-garder).
+
+Ce document existe pour deux exceptions que rien n'annonce :
+
+1. **`high-end-visual-design`** vient du *même repo* que `design-taste-frontend`.
+   On croit installer « taste-skill », on installe deux skills dont une seule est
+   combinable. Celle-là ne l'est pas.
+2. **Le plugin `ui-ux-pro-max`** livre sept skills, dont trois décident le design
+   system sans le dire.
+
+Le reste — le MCP 21st.dev, les skills de technique — est orthogonal et
+s'additionne sans risque.
 
 ---
 
@@ -18,11 +33,21 @@ passe défait la précédente.
 | | Skill | Décide le système ? |
 |---|---|:--:|
 | **Directeurs** | `impeccable` | ✅ et le committe sur disque |
-| | `design-taste-frontend` | ✅ par session |
-| | `high-end-visual-design` | ✅ et interdit le reste |
+| | `design-taste-frontend` | ✅ par session — mais **se met hors-jeu tout seul** sur l'UI produit |
+| | `high-end-visual-design` | ✅ et interdit le reste, sans échappatoire |
 | **Satellites** | `emil-design-eng` | ❌ mouvement uniquement |
 | | `ui-ux-pro-max` (la skill) | ❌ base de données consultable |
 | **Techniques** | `awwwards-motion-site`, `cinematic-scroll-site` | ❌ recettes d'effet |
+
+Deux directeurs sur la **même surface**, c'est le problème. Mais
+`design-taste-frontend` déclare lui-même son périmètre — *« landing pages,
+portfolios, redesigns. **Not** dashboards, not data tables, not multi-step
+product UI »* — donc sur un dashboard il ne se déclenche pas et laisse
+`impeccable` travailler. Le chevauchement n'existe en pratique que sur une
+landing, là où les deux veulent diriger. C'est le seul moment où il faut trancher.
+
+`high-end-visual-design` n'a pas ce garde-fou : il s'applique partout, et sa
+« Variance Mandate » interdit la cohérence écran à écran dont une UI produit vit.
 
 > ⚠️ Le **plugin** `ui-ux-pro-max` livre 7 skills, pas une. Trois d'entre elles
 > sont des décideurs déguisés. Voir la section dédiée — c'est le piège le moins
@@ -113,7 +138,13 @@ Variantes du même repo : `gpt-taste` (Codex), `image-to-code`,
 
 ### high-end-visual-design
 
-Même repo, install name `high-end-visual-design`.
+Même repo que `design-taste-frontend`, install name `high-end-visual-design`.
+
+> **C'est le piège.** Les deux sortent de `Leonxlnx/taste-skill`, donc on les
+> installe ensemble en croyant installer « taste-skill ». Ce sont deux skills
+> opposées : l'une lit la salle et prévoit un override pour chaque règle, l'autre
+> impose un standard d'agence sans échappatoire. `design-taste-frontend` est la
+> skill par défaut du repo ; `high-end-visual-design` en est une variante.
 
 Persona « Vanguard_UI_Architect », cible « expérience d'agence à 150k$ ». Deux
 mécaniques la distinguent :
@@ -202,6 +233,34 @@ consulter une base de données, on a invité trois décideurs de plus.
 
 ---
 
+## Le MCP 21st.dev (magic)
+
+[21st.dev](https://21st.dev/) — bibliothèque de composants React/Tailwind
+consultable par l'agent. Déclaré **par projet** dans un `.mcp.json` :
+
+```json
+"magic": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@21st-dev/magic@latest"],
+  "env": { "API_KEY": "${MAGIC_API_KEY}" }
+}
+```
+
+Outils exposés : `21st_magic_component_inspiration` (chercher des exemples),
+génération et refinement de composants, recherche de logos.
+
+**Zéro conflit avec quoi que ce soit, par nature.** Ce n'est pas une skill : il
+n'a pas d'opinion, il ne s'injecte pas dans le prompt, il ne se déclenche pas
+tout seul. C'est un outil qu'on appelle pour voir comment d'autres ont résolu un
+bloc — et ce que le directeur en fait reste sa décision. C'est le complément
+naturel du catalogue `ui-ux-pro-max` : l'un donne des styles et des palettes,
+l'autre des composants réels.
+
+Seule précaution : ce qu'il rend est du **matériau**, pas une direction. Un
+composant collé tel quel arrive avec sa propre typo et son propre spacing — le
+passer par `/impeccable polish` ou `/impeccable extract` avant de le garder.
+
 ## Les skills maison
 
 Écrites pour reproduire un effet précis repéré sur un site. Archivées dans
@@ -226,6 +285,128 @@ supposent qu'un directeur a déjà tranché la palette et la typo.
 
 ---
 
+## Ce que ça donne en vrai — mesuré
+
+Trois runs sur un projet neuf, les quatre skills installées en `.claude/skills/`,
+compte perso, sonnet, `claude -p`.
+
+| Prompt | Skill déclenchée | Ce qui s'est passé |
+|---|---|---|
+| « landing SaaS B2B — **ne code rien**, dis-moi la direction » | **aucune** | les 4 étaient listées et disponibles ; le modèle a répondu de lui-même |
+| « **construis** la landing… pas du template » | `design-taste-frontend`, **seule** | déclenchée une fois au début, puis 15 éditions en autonomie sans rappeler d'autre skill |
+| « **construis** le dashboard admin : sidebar, table, panneau de détail » | `impeccable`, **seule** | a lancé `context.mjs` → `NO_PRODUCT_MD` → lu `reference/init.md` → **s'est arrêtée pour poser 3 questions** au lieu de coder |
+
+Trois conclusions factuelles :
+
+**1. Le routage se fait tout seul.** Le prompt landing a pris taste-skill, le
+prompt dashboard a pris impeccable — exactement ce que leurs périmètres
+annoncent. Personne n'a eu à choisir.
+
+**2. Une seule skill se déclenche par tour.** C'est le point qui désamorce
+presque tout. Le coût permanent des quatre `description:` est d'environ **390
+tokens** — négligeable. Le corps ne se charge qu'à l'invocation, et il est gros :
+
+| Skill | `description:` (permanent) | corps (à l'invocation) |
+|---|--:|--:|
+| impeccable | ~223 tok | 21 Ko + une référence de commande + une de registre |
+| design-taste-frontend | ~67 tok | **87 Ko** (~22k tokens d'un coup) |
+| emil-design-eng | ~38 tok | 27 Ko |
+| high-end-visual-design | ~58 tok | 10 Ko |
+
+Un modèle qui vient d'avaler 22k tokens de direction artistique n'en charge pas
+5k de plus qui le contredisent. **Le conflit n'existe que si deux skills entrent
+dans le même tour** — ce qui n'arrive pas spontanément.
+
+**3. La contradiction est réelle, elle attend juste qu'on l'invoque.** La landing
+produite par taste-skill utilise `Space Grotesk` (display) et `Plus Jakarta Sans`
+(body). Ces deux polices sont dans la **ban list de `impeccable/brand.md`**
+(« training-data defaults »). `Plus Jakarta Sans` est en même temps dans la liste
+*approuvée* de `high-end-visual-design`. Trois verdicts opposés sur la même
+police, sur la même page.
+
+Personne ne l'a vu passer, parce qu'une seule skill parlait. Mais lancer
+`/impeccable polish` sur cette page **changera les deux polices** — et ça se
+présentera comme une amélioration, pas comme un conflit.
+
+> **La règle qui tombe de là :** le risque n'est pas d'avoir plusieurs skills
+> installées, c'est de **les enchaîner à la main sur la même surface**. Laisser
+> le routage faire son travail ; ne pas passer une page d'un directeur à l'autre.
+
+## Le vrai test : est-ce qu'elles disent la même chose ?
+
+Le déclenchement n'est pas le sujet. Puisqu'on les appelle **soi-même**, chacune
+pour son périmètre, la seule question qui compte est : **leurs prescriptions
+pointent-elles dans le même sens ?** Si deux skills appellent « bon » deux choses
+opposées, elles sont incompatibles — même invoquées à dix minutes d'intervalle.
+
+Comparaison sur les axes où elles se prononcent toutes. Citations littérales.
+
+### Polices
+
+| Police | impeccable `brand` | impeccable `product` | design-taste-frontend | high-end |
+|---|:--:|:--:|:--:|:--:|
+| `Inter` | ❌ ban list | ✅ « Product permissions » | ⚠️ découragée, override prévu | ❌ « instant fail » |
+| `Outfit` | ❌ ban list | — | ✅ **recommandée** | — |
+| `Plus Jakarta Sans` | ❌ ban list | — | — | ✅ **recommandée** |
+| `Space Grotesk` | ❌ ban list | — | — | ✅ (« geometric Grotesk ») |
+| `Geist` | ✅ | ✅ | ✅ | ✅ |
+
+`Geist` est la **seule police sur laquelle les quatre tombent d'accord**. Tout le
+reste est un champ de mines : la police recommandée par l'une est bannie par
+l'autre.
+
+### Cartes
+
+> **impeccable** : « Cards are the lazy answer. Use them only when they're truly the best affordance. **Nested cards are always wrong.** »
+> **taste-skill** : « Use cards **ONLY** when elevation communicates real hierarchy. Otherwise group with `border-t`, `divide-y`, or negative space. »
+> **high-end**, archétypes de layout : « **The Asymmetrical Bento** — a masonry-like CSS Grid of varying card sizes » · « **The Z-Axis Cascade** — elements stacked like physical cards, slightly overlapping, some with a `-2deg` rotation »
+
+Deux des trois archétypes de layout de high-end **sont** des grilles de cartes
+empilées. Les deux autres skills considèrent la carte comme le réflexe paresseux.
+
+### Fond et gradients
+
+> **taste-skill**, « Anti-Default Discipline » : « Do not default to: **AI-purple gradients**, **centered hero over dark mesh**, three equal feature cards, **generic glassmorphism on everything** »
+> **high-end**, archétype n°1 « Ethereal Glass » : « Deepest OLED black (`#050505`), **radial mesh gradients (subtle glowing purple/emerald orbs)** in the background. **Vantablack cards with heavy `backdrop-blur-2xl`** »
+
+L'archétype phare de high-end est, mot pour mot, la liste de ce que taste-skill
+interdit. Ce n'est pas une nuance de goût : c'est la même chose décrite une fois
+comme la cible, une fois comme le piège.
+
+### Identité
+
+> **impeccable** : « When the existing brand has already committed to a font or a lane, **identity-preservation wins**. »
+> **high-end** : « **NEVER** generate the exact same layout or aesthetic twice in a row. »
+
+Inconciliable par construction : l'un protège ce qui existe, l'autre a pour
+mandat de ne jamais le refaire.
+
+### Mouvement
+
+| | impeccable | emil | high-end |
+|---|---|---|---|
+| springs | « bounce/elastic **feel dated** » (liste des erreurs) | section entière : « springs feel more natural » | — |
+| `ease-in` | usage légitime reconnu (effet pic-fin) | « **Never** use ease-in for UI » | — |
+| `ease-in-out` | — | token défini `cubic-bezier(0.77,0,0.175,1)` | ❌ **banni** |
+
+### Le verdict sémantique
+
+| | impeccable | taste | emil | high-end |
+|---|:--:|:--:|:--:|:--:|
+| **impeccable** | — | ⚠️ même but, listes différentes | ⚠️ divergent sur le mouvement | ❌ **opposés** |
+| **taste** | ⚠️ | — | ✅ axes disjoints | ❌ **opposés** |
+| **emil** | ⚠️ | ✅ | — | ⚠️ `ease-in-out` |
+| **high-end** | ❌ | ❌ | ⚠️ | — |
+
+- **emil** ne se prononce ni sur la police, ni sur la couleur, ni sur le layout.
+  C'est le seul dont le périmètre est vraiment disjoint : il est compatible avec
+  tout, à un arbitrage près sur les springs.
+- **impeccable et taste veulent la même chose** — chasser les défauts LLM — mais
+  avec deux listes qui ne coïncident pas. Ils ne se contredisent pas sur le *but*,
+  seulement sur les *entrées*. C'est arbitrable : une seule liste fait foi.
+- **high-end contredit les deux sur le fond.** Cartes, gradients, identité : à
+  chaque fois l'inverse. Aucun arbitrage possible, c'est un autre projet.
+
 ## Ce qu'il ne faut pas mélanger
 
 | Combinaison | Verdict | Le point de rupture, concrètement |
@@ -237,17 +418,42 @@ supposent qu'un directeur a déjà tranché la palette et la typo.
 | impeccable **product** + high-end-visual-design | ❌ **jamais** | product.md autorise Inter ; high-end le déclare « instant fail ». Et « identity-preservation wins » vs « never the same twice » |
 | impeccable **brand** + high-end-visual-design | ❌ quand même | les deux bannissent Inter, donc l'accord est superficiel — mais deux ban lists différentes et deux moteurs de direction restent deux directeurs |
 | design-taste-frontend + high-end-visual-design | ❌ | même repo, thèses opposées : « lis la salle, override possible » vs « toujours du premium d'agence, aucun override ». Et taste dit lui-même « one system per project » |
-| impeccable + design-taste-frontend | ⚠️ redondant | le split brand/product d'impeccable couvre déjà le « quelle direction ». Deux ban lists de polices qui ne coïncident pas (taste bannit le serif par défaut ; impeccable/brand bannit les serifs *réflexes* — Playfair, Fraunces, Cormorant — mais encourage à chercher un vrai serif) |
+| impeccable + design-taste-frontend | ✅ sur UI produit, ⚠️ sur landing | sur un dashboard, taste se met hors-jeu tout seul (périmètre déclaré). Sur une landing les deux dirigent : deux ban lists de polices qui ne coïncident pas (taste bannit le serif par défaut ; impeccable/brand bannit les serifs *réflexes* — Playfair, Fraunces, Cormorant — mais encourage à chercher un vrai serif). Là, en choisir un. |
 | high-end-visual-design sur une UI produit | ❌ | c'est une skill *brand*. Sur un dashboard, la « Variance Mandate » casse la cohérence écran à écran |
 | n'importe quel directeur sans `PRODUCT.md` | ⚠️ | impeccable refuse et renvoie vers `init`. Les autres devinent — donc dérivent d'une session à l'autre |
 
-**La règle courte :**
+## Lesquels garder
 
-- Un design system existe déjà → **impeccable**, registre `product`.
-- Landing / portfolio one-shot, rien de committé → **design-taste-frontend**.
-- Landing greenfield qui doit choquer, zéro contrainte de marque → **high-end-visual-design**, seul.
-- Dans les trois cas : **+ emil-design-eng** (mouvement) **+ la skill `ui-ux-pro-max`** (catalogue).
-- Jamais deux directeurs sur la même surface. Jamais `high-end` sur un projet qui a une identité.
+**Garder :**
+
+| Skill | Pourquoi |
+|---|---|
+| **impeccable** | le seul qui persiste un système sur disque et qui bascule `brand` / `product`. Rien ne le remplace. |
+| **emil-design-eng** | le seul dont le périmètre est vraiment disjoint : il ne dit rien sur la police, la couleur ni le layout. Trancher une fois : **emil fait autorité sur le mouvement, impeccable sur le reste.** |
+| skill **`ui-ux-pro-max`** (celle-là seule) | catalogue consultable, aucune prescription — pas de conflit sémantique possible |
+| **MCP magic** (21st.dev) | fournit du matériau, pas une direction. Repasser ce qu'il rend par `/impeccable polish`. |
+
+**Jeter :**
+
+| Skill | Pourquoi |
+|---|---|
+| **high-end-visual-design** | ce n'est pas « une version plus agressive », c'est l'**inverse**. Cartes, gradients, identité : contredit impeccable *et* taste-skill à chaque fois. Inarbitrable. |
+| les 6 autres skills du plugin (`design-system`, `ui-styling`, `brand`, `design`, `banner-design`, `slides`) | mêmes prescriptions qu'impeccable, autre voix. `design-system` en particulier redéfinit l'architecture de tokens. |
+
+**Cas par cas :**
+
+**design-taste-frontend** — redondant avec impeccable dès qu'un `PRODUCT.md`
+existe : même but (chasser les défauts LLM), listes différentes. Utile pour une
+landing one-shot sans système. Si tu gardes les deux : sur une landing, en
+choisir **un**, et ne pas repasser l'autre dessus après coup.
+
+### Le mode d'emploi qui en découle
+
+- Un design system existe → **impeccable** mène, registre `product`, + emil.
+- Landing one-shot, rien de committé → **design-taste-frontend** seul, + emil.
+- Jamais deux directeurs sur la même surface — pas parce qu'ils se déclenchent
+  ensemble (ils ne le font pas), mais parce que **le second défera le travail du
+  premier en croyant l'améliorer**.
 
 ---
 

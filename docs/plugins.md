@@ -66,6 +66,23 @@ combinaisons à éviter. Nécessite Python 3 (stdlib seule).
 
 ## MCP
 
-**Aucun serveur MCP configuré au niveau utilisateur ni projet.** Les connecteurs
-claude.ai (Canva, Gmail, Drive, Calendar, Stripe) sont branchés côté compte
-claude.ai, pas dans un fichier — ils se réautorisent via `/mcp`.
+**Rien au niveau utilisateur** — pas de `mcpServers` dans les `.claude.json`.
+Tout est déclaré **par projet**, dans un `.mcp.json` à la racine du repo. Les
+serveurs qui reviennent :
+
+| Serveur | Transport | À quoi |
+|---|---|---|
+| `magic` ([21st.dev](https://21st.dev/)) | stdio, `npx @21st-dev/magic` | bibliothèque de composants React/Tailwind — voir [design.md](design.md) |
+| `stripe-test` / `stripe-live` | http, `mcp.stripe.com` | deux entrées, deux clés, jamais confondues |
+| `supabase` | http, `mcp.supabase.com` | base, storage, branching, edge functions |
+| `resend` | stdio, `npx resend-mcp` | emails transactionnels |
+| `dokploy-mcp` | stdio, `npx @dokploy/mcp` | déploiement |
+| `gsc` | stdio, `uvx mcp-search-console` | Search Console |
+
+Les clés passent par `${VAR}` dans `.mcp.json`, résolues depuis le bloc `env` du
+`.claude/settings.local.json` du projet — **gitignoré, jamais versionné**.
+Attention : Claude Code n'expanse pas `${VAR}` partout (le `.mcp.json` d'un
+projet le note en commentaire pour `dokploy`).
+
+Les connecteurs claude.ai (Canva, Gmail, Drive, Calendar, Stripe) sont branchés
+côté compte claude.ai, pas dans un fichier — ils se réautorisent via `/mcp`.
