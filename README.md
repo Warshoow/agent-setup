@@ -54,7 +54,7 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 - **[docs/comptes.md](docs/comptes.md)** — le double compte : comment ça bascule, ce qui est partagé, ce qui ne l'est pas.
 - **[docs/skills.md](docs/skills.md)** — les skills maison, une ligne chacune, + les externes (graphify).
 - **[agents/README.md](agents/README.md)** — les subagents et quel modèle chacun tourne.
-- **[docs/design.md](docs/design.md)** — le stack design : impeccable, emil, taste-skill, ui-ux-pro-max — **et lesquels ne pas mélanger**.
+- **[docs/design.md](docs/design.md)** — le stack design : impeccable, emil, taste-skill, ui-ux-pro-max — **et lesquels ne pas mélanger**. Porte aussi l'index des repos et outils design évalués, et le mode d'emploi (expérimental).
 - **[docs/plugins.md](docs/plugins.md)** — plugins installés, marketplaces, versions.
 - **[docs/hooks.md](docs/hooks.md)** — les deux hooks, **et pourquoi `context-watch.sh` ne marchait pas**.
 - **[docs/outils.md](docs/outils.md)** — rtk, graphify, afk.

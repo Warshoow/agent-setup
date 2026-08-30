@@ -16,14 +16,14 @@ Source unique : `~/skills/`. Chaque compte y accède par un symlink
 
 | Skill | Ce que ça fait |
 |---|---|
-| [`awwwards-motion-site`](../skills/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D. Next/HTML + Lenis + GSAP + R3F |
-| [`cinematic-scroll-site`](../skills/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (technique des pages produit Apple). Livre `ScrollScrubScene.tsx`, `chapters.ts`, `extract-frames.sh` |
+| [`awwwards-motion-site`](../experimental/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D. Next/HTML + Lenis + GSAP + R3F |
+| [`cinematic-scroll-site`](../experimental/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (technique des pages produit Apple). Livre `ScrollScrubScene.tsx`, `chapters.ts`, `extract-frames.sh` |
 
 Écrites pour reproduire un effet précis repéré sur un site. Trop spécifiques pour
 être always-on : on les copie dans le projet qui en a besoin.
 
 ```bash
-cp -r <ce-repo>/skills/awwwards-motion-site <projet>/.claude/skills/
+cp -r <ce-repo>/experimental/awwwards-motion-site <projet>/.claude/skills/
 ```
 
 Le reste du stack design (impeccable, emil, taste-skill, ui-ux-pro-max) vit par

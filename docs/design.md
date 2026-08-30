@@ -22,6 +22,219 @@ Ce document existe pour deux exceptions que rien n'annonce :
 Le reste — le MCP 21st.dev, les skills de technique — est orthogonal et
 s'additionne sans risque.
 
+Deux entrées rapides : le **mode d'emploi** juste en dessous — encore
+expérimental, il n'est appliqué en entier sur aucun projet — et
+l'[index des repos et outils](#index--repos-et-outils-cités), qui range tout ce
+qui a été évalué par famille : deux entrées de la même famille sont des
+équivalences, on en prend une seule.
+
+---
+
+## ⚗️ Le mode d'emploi — expérimental, en cours de mise en place
+
+> **Statut : brouillon.** Ce flux vient d'un audit externe recoupé avec l'analyse
+> plus bas. Il n'est appliqué sur **aucun** projet en entier aujourd'hui —
+> `qr_code_project` s'en approche le plus. Tant que les cases ci-dessous ne sont
+> pas cochées, c'est une intention, pas l'état du système. Le reste du document
+> (à partir de [Qui décide quoi](#qui-décide-quoi)) décrit ce qui est **mesuré**
+> et reste valable indépendamment.
+
+### La règle
+
+**Un seul directeur par surface.** Un directeur décide le système — palette, typo,
+échelle. Deux sur la même page et la seconde passe défait la première en croyant
+l'améliorer. Un catalogue, une revue, une skill de mouvement ne dirigent pas :
+ils s'ajoutent sans risque.
+
+Corollaire moins évident : le risque ne vient pas d'avoir plusieurs skills
+installées — une seule se déclenche par tour — mais de **les enchaîner à la main**
+sur la même page.
+
+### Le noyau visé
+
+| Rôle | Skill | Installée où |
+|---|---|---|
+| directeur | `impeccable` | par projet — `npx impeccable install` |
+| mouvement | `emil-design-eng` | par projet — `npx skills add emilkowalski/skills --skill emil-design-eng` |
+| audit de fin (a11y, UX, typo) | `web-design-guidelines` | par projet — `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
+| vérification visuelle | [`visual-check`](skills.md) — Playwright en conteneur | déjà au niveau user |
+| catalogue | skill `ui-ux-pro-max` (plugin user) | user |
+| matériau | MCP `magic` (21st.dev) | `.mcp.json` du projet |
+
+Tout le reste s'installe **à la demande, un directeur à la fois** — voir
+[l'index](#index--repos-et-outils-cités).
+
+### Le flux
+
+1. **Produit / app** → `/impeccable init` (PRODUCT.md + DESIGN.md) **avant la première ligne d'UI** → construire sous ce système.
+2. **Landing sans système** → `design-taste-frontend` **une seule fois** pour poser le look. Si le projet continue, ancrer le résultat dans DESIGN.md et impeccable reprend la main.
+3. **Animations** → emil, seul à décider le mouvement. Une seule échelle de tokens d'easing importée (celle d'emil), pas les deux.
+4. **Scroll cinéma** → **une** skill scroll (`awwwards-motion-site` ou `cinematic-scroll-site`), copiée dans le projet.
+5. **Avant « c'est bon »** → `web-design-guidelines`, puis `visual-check` si le rendu compte.
+
+> L'étape 5 est celle qui ne se fait jamais à la main. La brancher sur la porte de
+> vérification `.afk.env` du projet plutôt que d'y penser à chaque fois.
+
+### À ne jamais charger ensemble
+
+| Combinaison | Pourquoi |
+|---|---|
+| `high-end-visual-design` + n'importe quel directeur | thèses opposées sur les cartes, les gradients et l'identité — voir [le verdict sémantique](#le-verdict-sémantique) |
+| `impeccable` + `design-system` ou `ui-styling` (plugin pro-max) | deux architectures de tokens, deux sources de vérité |
+| `impeccable` + `design-taste-frontend` **sur la même landing** | deux ban lists de polices qui ne coïncident pas ; en choisir un |
+| deux skills scroll (maison + `scrollcraft`) | `scrollcraft` est un directeur complet (typo, palette, huit grammaires, « fingerprint gate » anti-répétition) — même conflit que high-end |
+| deux packs de polish (`jakubkrehel` + pro-max + `elayadesign`) | `better-colors`, `better-typography` et `landing-page-design` posent chacun un système |
+| n'importe quel directeur sans `PRODUCT.md` | impeccable refuse et renvoie vers `init` ; les autres devinent, donc dérivent d'une session à l'autre |
+
+### Étapes de mise en place
+
+Ordre voulu : retirer d'abord, trancher ensuite, installer en dernier.
+
+**1. Retirer les directeurs en trop** — aucune install, gain immédiat
+```bash
+rm -rf ~/projects-perso/notion-todo/{.claude,.agents}/skills/high-end-visual-design
+rm -rf ~/projects-perso/adcom-project-next/{.claude,.agents}/skills/high-end-visual-design
+rm -rf ~/projects-pro/ownhomemap/.claude/skills/{design,design-system,ui-ux-pro-max}
+rm     ~/projects-pro/ownhomemap/.claude/skills/frontend-design.md   # skill Flutter sur un Next 16
+```
+
+**2. Trancher un directeur là où il n'y en a pas**
+- `adcom-project-next` — aucun `PRODUCT.md` et trois directeurs. Si le projet continue : `/impeccable init`, puis retirer taste. Si c'est une landing one-shot : taste seul.
+- `ownhomemap` — aucun système committé. Soit `npx impeccable install` + `/impeccable audit`, soit assumer « pas de système » et ne rien installer.
+
+**3. Installer le manquant** (projets UI actifs seulement)
+```bash
+npx skills add vercel-labs/agent-skills --skill web-design-guidelines
+```
+
+**4. Aligner l'existant**
+- `notion-todo` : impeccable est dans `.claude/skills/` mais pas dans `.agents/skills/` — recopier pour que les deux disent la même chose.
+- `WatchLaterAI`, `notion-todo` : DESIGN.md existe → ne plus invoquer taste dessus.
+
+**5. Point resté ouvert**
+Le plugin `ui-ux-pro-max` s'active en entier : on ne peut pas n'en garder qu'une
+skill. Soit on accepte que les 6 autres restent listées (~1 k tokens, elles ne se
+déclenchent pas d'elles-mêmes en pratique), soit on désactive le plugin et on
+copie `ui-ux-pro-max/` en skill de projet. Non tranché.
+
+### État par projet
+
+| Projet | Directeurs présents | Système sur disque | Écart au flux |
+|---|---|---|---|
+| `qr_code_project` | impeccable seul | PRODUCT + DESIGN | manque l'audit de fin |
+| `WatchLaterAI` | impeccable (`product`) + taste | PRODUCT + DESIGN | taste redondant depuis DESIGN.md |
+| `notion-todo` | impeccable + taste + high-end | PRODUCT + DESIGN (`brand`) | 3 directeurs ; `.agents` désynchronisé |
+| `adcom-project-next` | impeccable + taste + high-end | aucun | 3 directeurs, zéro système |
+| `ownhomemap` (Next 16) | `design-system` + `design` + `frontend-design` (Flutter) recopiées | aucun | 2 directeurs, mauvais framework, pas de système |
+| `Trainr`, `safer` | aucun | — | hors périmètre design |
+
+---
+
+## Index — repos et outils cités
+
+Réserve : tout ce qui a été évalué, rangé par famille. **La famille dit le rôle** —
+deux entrées de la même famille sont des équivalences, on en prend une seule.
+
+Statuts : ✅ installé · ⚠️ installé, à retirer · ○ disponible, non installé ·
+❌ écarté · ? cité, non vérifié.
+
+### Directeurs — décident palette, typo, échelle. **Un seul à la fois.**
+
+| Skill | Repo | Installation | Ce qu'il apporte | |
+|---|---|---|---|:--:|
+| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `npx impeccable install` | seul à persister le système sur disque (`DESIGN.md`, `.impeccable/design.json`) et à basculer registre `brand` / `product` | ✅ |
+| `design-taste-frontend` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `npx skills add https://github.com/Leonxlnx/taste-skill --skill design-taste-frontend` | « Design Read » + dials ; landing, portfolio, redesign. Se met hors-jeu sur l'UI produit | ✅ |
+| `high-end-visual-design` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | même repo, `--skill high-end-visual-design` | standard d'agence sans override ; « Absolute Zero » + « Variance Mandate » | ⚠️ |
+| `scrollcraft` | [nateherkai/scroll-craft](https://github.com/nateherkai/scroll-craft) | `/plugin marketplace add nateherkai/scroll-craft` puis `/plugin install nateherk-design` | scroll **et** direction complète : 8 grammaires de page, 6 rôles de couleur, « fingerprint gate » (différer sur 4 dimensions / 6 à chaque build) | ❌ |
+| `landing-page-design` | [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) | — | landing conversion : intake, structure, copy **et** système visuel (typo, spacing, radius, motion) | ○ |
+| `redesign-skill` | [elayadesign/redesign-skill](https://github.com/elayadesign/redesign-skill) | clone + « audit this project and upgrade the design » | refonte d'un site existant | ○ |
+| `design-system` | plugin [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | fourni par le plugin | tokens 3 couches — **doublon frontal de `DESIGN.md`** | ⚠️ |
+| `ui-styling` | même plugin | fourni par le plugin | impose shadcn/ui + Radix + Tailwind quel que soit le stack | ⚠️ |
+| `brand` | même plugin | fourni par le plugin | voix de marque — recouvre `PRODUCT.md` | ⚠️ |
+| `better-colors`, `better-typography` | [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | `npx skills add jakubkrehel/skills` | annoncées « polish », mais posent une palette et une échelle → directeurs | ○ |
+| `frontend-design` | skill Anthropic | — | variante Flutter recopiée dans `ownhomemap`, mauvais stack | ⚠️ |
+| `web-design-engineer` (garden), Awesome Design / brand DESIGN.md | — | — | cités dans l'audit externe, jamais évalués | ? |
+
+### Mouvement — autorité unique : emil
+
+| Skill | Repo | Rôle | |
+|---|---|---|:--:|
+| `emil-design-eng` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | courbes, springs, `prefers-reduced-motion` ; revue en tableau Before / After / Why | ✅ |
+| `animate` | même repo | écrit l'animation (courbe, durée, propriétés) | ○ |
+| `review-animations` | même repo | revue stricte contre les guidelines | ✅ (3 projets) |
+| `improve-animations` | même repo | audit du codebase + plan priorisé | ○ |
+| `find-animation-opportunities` | même repo | repère où le mouvement manque | ○ |
+| `animation-vocabulary` | même repo | apprend à nommer l'intention d'animation | ✅ (3 projets) |
+| `apple-design` | même repo | principes d'interface et de motion Apple sur le web | ○ |
+| `animate-expo`, `write-swift`, `ask-sonner`, `pick-ui-library`, `prototype` | même repo | hors périmètre web ou orthogonaux | ○ |
+
+Installation : `npx skills@latest add emilkowalski/skills --skill <nom>`.
+
+### Audit et revue — ne dirigent pas, se cumulent sans risque
+
+| Skill | Repo | Rôle | |
+|---|---|---|:--:|
+| `web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | 100+ règles a11y / perf / UX sur du code UI existant | ○ **à installer** |
+| `react-best-practices` | même repo | 40+ règles perf React/Next | ○ |
+| `writing-guidelines` | même repo | 80+ règles de prose et de doc | ○ |
+| `composition-patterns`, `react-view-transitions`, `react-native-guidelines`, `vercel-optimize` | même repo | orthogonaux au design | ○ |
+| `interface-review`, `better-interface` | [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | revue multi-axes (UI, typo, layout, couleur, copy, a11y) | ○ |
+| `/impeccable audit`, `/impeccable critique` | impeccable | diagnostic dans le système du projet | ✅ |
+
+Installation : `npx skills add vercel-labs/agent-skills --skill <nom>`.
+
+### Polish — après qu'un look existe, jamais deux packs à la fois
+
+| Skill | Repo | Rôle | |
+|---|---|---|:--:|
+| `better-ui` | [jakubkrehel/skills](https://github.com/jakubkrehel/skills) | rayons concentriques, alignement, icônes, zones de clic | ○ |
+| `better-layout`, `better-accessibility`, `better-writing` | même repo | groupement / ordre de lecture, conformité a11y, copy produit | ○ |
+| `break`, `variant`, `explain-interface` | même repo | rendu de tous les états, variantes, décodage d'une UI existante | ○ |
+| `/impeccable polish`, `bolder`, `quieter`, `delight` | impeccable | passes étroites dans le système du projet | ✅ |
+
+### Catalogues et matériau — proposent, n'imposent rien
+
+| Outil | Source | Ce qu'il donne | |
+|---|---|---|:--:|
+| skill `ui-ux-pro-max` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 84 styles, 192 palettes, 74 pairings de polices, 119 règles UX, 17 presets GSAP | ✅ |
+| MCP `magic` | [21st.dev](https://21st.dev/) | composants React/Tailwind réels, recherche d'inspiration | ✅ (5 projets) |
+| `image-to-code` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | maquette → code, seulement si la maquette est nette | ○ |
+| variantes taste (`minimalist-ui`, `industrial-brutalist-ui`, `brandkit`, `gpt-taste`, `redesign-existing-projects`, `full-output-enforcement`) | même repo | déclinaisons de look | ○ |
+| [ui-skills.com](https://www.ui-skills.com/) | annuaire | recense les skills design publiées | ? |
+
+Ce que rend `magic` est du **matériau** : un composant collé tel quel arrive avec
+sa propre typo et son propre spacing. Le repasser par `/impeccable polish`.
+
+### Techniques d'effet — recettes, aucune direction artistique
+
+| Skill | Source | Effet | |
+|---|---|---|:--:|
+| [`awwwards-motion-site`](../experimental/awwwards-motion-site/) | maison | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D | ○ archivée |
+| [`cinematic-scroll-site`](../experimental/cinematic-scroll-site/) | maison | le scroll scrube une caméra pré-rendue (technique des pages produit Apple) | ○ archivée |
+
+Équivalence à connaître : `scrollcraft` couvre le même besoin **mais dirige aussi
+le reste**. Prendre l'un ou l'autre, jamais les deux.
+
+### Vérification visuelle
+
+| Outil | Source | Rôle | |
+|---|---|---|:--:|
+| [`visual-check`](skills.md) / `visual-check-setup` | maison, `~/skills/` | screenshot, erreurs console, clics, Playwright — tout dans le conteneur `playright-env`, rien installé dans le projet | ✅ user |
+| MCP `playwright` | `@playwright/mcp` | pilotage navigateur déclaré par projet | ✅ (`adcom-project-next`) |
+| `/impeccable live` | impeccable | itère sur le DOM réel ; pose des hooks qui interceptent les éditions — intrusif | ○ |
+
+### Écartés — cités, non retenus
+
+| Quoi | Pourquoi |
+|---|---|
+| `high-end-visual-design` | contredit impeccable *et* taste sur les cartes, les gradients et l'identité. Inarbitrable |
+| `scrollcraft` | directeur déguisé en skill scroll ; son « fingerprint gate » est la négation de « identity-preservation wins » |
+| skills `design`, `banner-design`, `slides` (pro-max) | hors périmètre ; `design` demande en plus une `GEMINI_API_KEY` |
+| `frontend-design` (Anthropic) | redondant avec taste + impeccable |
+| suites en bloc (MengTo, Owl-Listener) | à ne pas installer en masse — extraire une skill le jour où le cas se présente |
+| Sleek mobile | hors stack web |
+| `laws-of-ux`, packs de design review tiers | plus tard, une fois le flux de base stable |
+
 ---
 
 ## Qui décide quoi
@@ -264,20 +477,20 @@ passer par `/impeccable polish` ou `/impeccable extract` avant de le garder.
 ## Les skills maison
 
 Écrites pour reproduire un effet précis repéré sur un site. Archivées dans
-[`skills/`](../skills/) — **pas installées au niveau user** : elles sont trop
+[`experimental/`](../experimental/) — **pas installées au niveau user** : elles sont trop
 spécifiques pour être always-on, on les copie dans le projet qui en a besoin.
 
 | Skill | Effet | Stack |
 |---|---|---|
-| [`awwwards-motion-site`](../skills/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, marquees, objet 3D central | Next ou HTML nu + Lenis + GSAP ScrollTrigger + R3F/Spline |
-| [`cinematic-scroll-site`](../skills/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (la technique des pages produit Apple) — avec `ScrollScrubScene.tsx`, `chapters.ts` et `extract-frames.sh` fournis | Next App Router + Lenis + scrub `<canvas>` |
+| [`awwwards-motion-site`](../experimental/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, marquees, objet 3D central | Next ou HTML nu + Lenis + GSAP ScrollTrigger + R3F/Spline |
+| [`cinematic-scroll-site`](../experimental/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (la technique des pages produit Apple) — avec `ScrollScrubScene.tsx`, `chapters.ts` et `extract-frames.sh` fournis | Next App Router + Lenis + scrub `<canvas>` |
 
 `cinematic-scroll-site` porte une observation qui vaut le détour : ces sites ne
 sont presque jamais de la 3D temps réel, c'est une vidéo pré-rendue scrubbée par
 la position de scroll — d'où le photoréalisme qui tourne sur un téléphone.
 
 ```bash
-cp -r <ce-repo>/skills/awwwards-motion-site <projet>/.claude/skills/
+cp -r <ce-repo>/experimental/awwwards-motion-site <projet>/.claude/skills/
 ```
 
 Ce sont des **recettes de fabrication**, pas des directions artistiques : elles
