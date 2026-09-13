@@ -3,16 +3,15 @@
 
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
-# Compte par défaut. Tout le reste (skills, agents, plugins, mémoire, sessions)
-# vit sous ce dossier — c'est LA variable qui bascule d'un compte à l'autre.
-export CLAUDE_CONFIG_DIR="$HOME/.claude-perso"
+# Pas de CLAUDE_CONFIG_DIR : Claude Code lit ~/.claude par défaut. La variable
+# n'existe plus ici depuis l'unification des comptes (voir docs/comptes.md) ;
+# elle reste utile dans les devcontainers, où le HOME du conteneur n'est pas
+# celui où la config de l'hôte est montée (voir docs/devcontainers.md).
 
-# Bascule manuelle, dans le shell courant.
-claude-pro()   { export CLAUDE_CONFIG_DIR="$HOME/.claude-pro";   echo "Claude: compte pro actif"; }
-claude-perso() { export CLAUDE_CONFIG_DIR="$HOME/.claude-perso"; echo "Claude: compte perso actif"; }
-
-# Seuil du hook context-watch. Défaut du script = 200k ; le modèle est opus[1m].
-export CTX_LIMIT=1000000
+# Seuils du hook context-watch (docs/hooks.md, docs/couts.md).
+# Les defauts du script conviennent : CTX_LIMIT=200000 (contexte du tour courant),
+# CTX_BUDGET=20000000 (entree cumulee de la session). Ne PAS aligner CTX_LIMIT sur
+# la fenetre d'opus[1m] : la taille de la fenetre ne dit rien du cout par tour.
 
 # graphify → export Obsidian (relu par les devcontainers via ${localEnv:OBSIDIAN_VAULT_PATH}).
 # À adapter : chemin WSL du vault côté Windows.

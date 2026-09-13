@@ -58,7 +58,7 @@ Vit dans le repo [afk.sh](https://github.com/Warshoow/afk.sh), exposée par doub
 
 ```
 ~/skills/afk-setup                 → ~/afk/skills/afk-setup
-~/.claude-perso/skills/afk-setup   → ~/skills/afk-setup
+~/.claude/skills/afk-setup   → ~/skills/afk-setup
 ```
 
 Écrit le `.afk.env` d'un projet : la porte de vérification qui définit ce que

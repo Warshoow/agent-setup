@@ -374,7 +374,7 @@ reste.** Et n'importer qu'une seule échelle de tokens d'easing.
 /plugin install ui-ux-pro-max@ui-ux-pro-max-skill
 ```
 
-Installé en **v2.13.0, compte perso** (déclaré dans `settings.perso.json`).
+Installé en **v2.13.0** (déclaré dans `settings.json`).
 Python 3 requis pour les scripts de recherche
 (stdlib seule). Coût : **~1 082 tokens always-on**, aucun hook, aucun agent,
 aucun serveur MCP enregistré.
@@ -458,7 +458,7 @@ supposent qu'un directeur a déjà tranché la palette et la typo.
 ## Ce que ça donne en vrai — mesuré
 
 Trois runs sur un projet neuf, les quatre skills installées en `.claude/skills/`,
-compte perso, sonnet, `claude -p`.
+sonnet, `claude -p`.
 
 | Prompt | Skill déclenchée | Ce qui s'est passé |
 |---|---|---|

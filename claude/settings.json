@@ -3,11 +3,26 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${HOME}/hooks/big-read-gate.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
             "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "${HOME}/hooks/big-read-gate.py",
+            "timeout": 10
           }
         ]
       }
@@ -25,7 +40,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash \"${CLAUDE_CONFIG_DIR}/plugins/marketplaces/ponytail/hooks/ponytail-statusline.sh\""
+    "command": "bash \"${HOME}/.claude/plugins/marketplaces/ponytail/hooks/ponytail-statusline.sh\""
   },
   "enabledPlugins": {
     "ponytail@ponytail": true,

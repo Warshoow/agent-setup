@@ -1,11 +1,10 @@
 # Subagents user-level — politique de modèles
 
 Agents **génériques** disponibles dans tous les projets. Source unique : `~/agents/`,
-exposée aux deux configs Claude par symlinks :
+exposée à la config Claude par un symlink :
 
 ```
-~/.claude-pro/agents   → ~/agents
-~/.claude-perso/agents → ~/agents
+~/.claude/agents → ~/agents
 ```
 
 Dans les devcontainers, `~/agents` est bind-mounté (même chemin absolu) pour que

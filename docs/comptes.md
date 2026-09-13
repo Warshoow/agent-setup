@@ -1,64 +1,57 @@
-# Le double compte
+# La config Claude
 
-Deux abonnements Claude sur la même machine : **perso** et **pro**. Ils ne se
-parlent pas — sessions, mémoire, plugins, credentials sont séparés.
-
-## Le mécanisme : une seule variable
-
-Claude Code lit tout depuis `$CLAUDE_CONFIG_DIR`. Changer cette variable = changer
-de compte, y compris le login.
-
-```bash
-export CLAUDE_CONFIG_DIR="$HOME/.claude-perso"   # défaut, posé dans ~/.bashrc
-claude-pro                                        # bascule le shell courant
-claude-perso                                      # revient
-```
-
-Les deux fonctions sont définies dans [`shell/bashrc-claude.sh`](../shell/bashrc-claude.sh) :
-elles ne font qu'un `export`. Elles n'agissent que sur le shell courant — un
-nouvel onglet repart sur perso.
-
-## La bascule automatique : `claude-dev`
-
-[`bin/claude-dev`](../bin/claude-dev) choisit le compte d'après le chemin du projet,
-puis lance `claude` :
-
-| cwd contient | compte |
-|---|---|
-| `/projects-pro/` | `~/.claude-pro` 🏢 |
-| `/projects-perso/` | `~/.claude-perso` 🏠 |
-| autre | refuse de démarrer |
-
-C'est le garde-fou anti-« j'ai bossé le projet client sur le compte perso ».
-Dans les devcontainers, le même choix se fait par `remoteEnv.CLAUDE_CONFIG_DIR`
-dans le `devcontainer.json` du projet.
-
-## Ce qui est partagé entre les deux comptes
-
-Par symlink, source unique dans `~` :
+Une seule config, dans `~/.claude`. Claude Code la lit par défaut : plus de
+variable à poser, plus de bascule à faire.
 
 ```
-~/.claude-perso/agents      → ~/agents
-~/.claude-pro/agents        → ~/agents
-~/.claude-{perso,pro}/skills/<nom> → ~/skills/<nom>
+~/.claude/
+├── CLAUDE.md          instructions globales
+├── RTK.md             @-importé par CLAUDE.md
+├── settings.json      modèle, hooks, statusline, plugins
+├── .credentials.json  OAuth Claude + OAuth des serveurs MCP
+├── .claude.json       identité du compte, état par projet
+├── agents  ──symlink──►  ~/agents
+├── skills/<nom> ─symlink►  ~/skills/<nom>
+├── projects/<slug>/   sessions + mémoire, un dossier par cwd
+└── plugins/           marketplaces + cache
 ```
 
-Plus, de fait : `~/hooks/context-watch.sh` (les deux `settings.json` le pointent),
-`~/.gitconfig`, `~/.ssh`, le binaire `claude` lui-même.
+## Ce qui vient de `~`, par symlink
 
-## Ce qui diverge
+```
+~/.claude/agents        → ~/agents
+~/.claude/skills/<nom>  → ~/skills/<nom>
+```
 
-| | perso | pro |
-|---|---|---|
-| `CLAUDE.md` | langue de commit = celle du repo | commits **en anglais** |
-| plugins | ponytail, mattpocock, **marketing-skills** | ponytail, mattpocock |
-| skills | + `afk-setup` | — |
-| `remoteControlAtStartup` | `false` (explicite) | absent |
-| `graphify` | v0.9.25 | v0.9.46 |
+Une seule copie de chaque asset, éditée à un seul endroit. Plus, de fait :
+`~/hooks/context-watch.sh` (pointé par `settings.json`), `~/.gitconfig`,
+`~/.ssh`, le binaire `claude` lui-même.
 
-Les deux `CLAUDE.md` sont sinon identiques : pas d'auto-commit, pas de trailer
-d'attribution, Conventional Commits, deux formats de message proposés avant de
-commiter, communication ultra-concise. Ils `@`-importent `RTK.md`.
+## `CLAUDE_CONFIG_DIR`
 
-> Les versions de graphify ont divergé — le skill s'auto-met à jour au lancement,
-> ça se recalera tout seul.
+La variable existe toujours côté Claude Code, mais n'est plus posée dans
+`~/.bashrc`. Elle reste **obligatoire dans les devcontainers** : le `$HOME` du
+conteneur (`/home/node`) n'est pas celui où la config de l'hôte est montée. Voir
+[devcontainers.md](devcontainers.md).
+
+## Historique : le double compte
+
+Jusqu'à septembre 2026, deux abonnements Claude cohabitaient sur la machine,
+dans `~/.claude-perso` et `~/.claude-pro`. `CLAUDE_CONFIG_DIR` basculait de l'un
+à l'autre — posée dans `~/.bashrc` (défaut perso), deux fonctions shell
+`claude-pro` / `claude-perso` pour le shell courant, un script `bin/claude-dev`
+qui choisissait d'après le chemin du projet, et `remoteEnv.CLAUDE_CONFIG_DIR`
+dans chaque `devcontainer.json`.
+
+Ce que ça coûtait, et qui a motivé l'unification :
+
+- deux jeux de plugins, de skills et de `CLAUDE.md` à tenir en phase ;
+- la mémoire d'un même projet éclatée sur les deux configs selon le shell
+  utilisé ce jour-là ;
+- les chemins absolus des plugins (`installed_plugins.json`,
+  `known_marketplaces.json`) écrasés par les chemins d'un conteneur, cassant
+  l'installation côté hôte.
+
+L'abonnement perso a été abandonné ; le compte pro a gardé son identité. Tout le
+reste — projets, sessions, mémoires, historique, plugins, jetons MCP — a été
+fusionné dans `~/.claude`.

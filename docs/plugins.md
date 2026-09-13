@@ -27,12 +27,12 @@ Il fournit aussi la **statusline** des deux comptes :
 ```json
 "statusLine": {
   "type": "command",
-  "command": "bash \"$CLAUDE_CONFIG_DIR/plugins/marketplaces/ponytail/hooks/ponytail-statusline.sh\""
+  "command": "bash \"${HOME}/.claude/plugins/marketplaces/ponytail/hooks/ponytail-statusline.sh\""
 }
 ```
 
-> Le chemin est écrit en absolu dans chaque `settings.json` (`.claude-perso/…` vs
-> `.claude-pro/…`) — c'est la seule ligne à ne pas copier bêtement d'un compte à l'autre.
+> Le chemin est écrit en absolu dans `settings.json` : `$CLAUDE_CONFIG_DIR` n'est
+> plus posé dans l'environnement depuis l'unification des comptes.
 
 Commandes : `/ponytail lite|full|ultra`, `/ponytail-review`, `/ponytail-audit`,
 `/ponytail-debt`, `/ponytail-gain`.

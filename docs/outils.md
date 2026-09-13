@@ -3,7 +3,13 @@
 ## rtk — Rust Token Killer
 
 Proxy CLI qui filtre et résume la sortie des commandes avant qu'elle n'atteigne
-le contexte. 60–90 % d'économie sur les opérations de dev.
+le contexte. Annonce 60–90 % d'économie sur les opérations de dev.
+
+> ⚠️ **Mesuré : 1 à 2 % ici, pas 60–90 %.** Voir [couts.md § 4](couts.md#4-rtk-mesuré).
+> Benchmark apparié de JetBrains : +7,6 % de coût à effort faible, ±0 à effort
+> élevé. `rtk gain` compte ce qui a été **envoyé**, pas ce qui a été **économisé** :
+> il compare à un scénario qui n'a pas eu lieu. Laissé en place — l'effet est réel
+> mais sous le bruit.
 
 - Binaire : `~/.local/bin/rtk` (v0.43.0)
 - Branché par le hook `PreToolUse` sur `Bash` → `rtk hook claude` : la réécriture
@@ -15,7 +21,7 @@ Proxies : `ls tree read git gh glab aws psql pnpm docker dotnet find diff log js
 Méta-commandes (à appeler directement, elles ne passent pas par le hook) :
 
 ```bash
-rtk gain              # analytics des économies
+rtk gain              # analytics des économies (à ne pas croire, cf. couts.md)
 rtk gain --history    # historique par commande
 rtk discover          # repère les occasions ratées dans l'historique Claude Code
 rtk proxy <cmd>       # exécution brute, sans filtre (debug)
@@ -43,7 +49,6 @@ Voir [skills.md](skills.md#graphify). Package pypi `graphifyy`, skill auto-insta
 
 | Script | Rôle |
 |---|---|
-| [`claude-dev`](../bin/claude-dev) | lance `claude` en choisissant le compte d'après le cwd — voir [comptes.md](comptes.md) |
 | [`import-project.sh`](../bin/import-project.sh) | copie un dossier Windows → WSL en `rsync`, exclut `node_modules`/`vendor`/`.venv`/caches, remet des permissions saines et passe `.env` / clés / `*.pem` en `600` |
 
 Autres symlinks dans `~/.local/bin/` : `claude` (→ la version installée),

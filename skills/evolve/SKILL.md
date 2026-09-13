@@ -12,10 +12,9 @@ il ne manque que la promotion.
 
 ## Procédure
 
-1. **Collecte.** Lister les mémoires de toutes les configs présentes :
-   `~/.claude-perso/projects/*/memory/*.md` et `~/.claude-pro/projects/*/memory/*.md`.
-   Dans un devcontainer, une seule des deux existe en général — faire avec ce qui
-   est là et le signaler dans le rapport. Lire en priorité `type: feedback` et
+1. **Collecte.** Lister les mémoires de la config : `~/.claude/projects/*/memory/*.md`.
+   Dans un devcontainer, la config de l'hôte est montée au même chemin absolu ; si
+   elle est absente, faire avec ce qui est là et le signaler dans le rapport. Lire en priorité `type: feedback` et
    `type: user`, puis `project`. Ignorer les mémoires portant déjà une mention
    « Promu en skill ».
 
@@ -40,8 +39,7 @@ il ne manque que la promotion.
    - créer `~/skills/<nom>/SKILL.md` — frontmatter `name` + `description`
      (les triggers vivent dans la description), corps concis : quand,
      procédure, exemples concrets tirés des mémoires sources ;
-   - symlinker dans chaque config existante :
-     `ln -sfn ~/skills/<nom> ~/.claude-pro/skills/<nom>` (idem `.claude-perso`) ;
+   - symlinker dans la config : `ln -sfn ~/skills/<nom> ~/.claude/skills/<nom>` ;
    - marquer chaque mémoire source : ajouter « Promu en skill [[<nom>]] le
      <date> » pour qu'elle ne soit pas re-proposée au prochain passage.
 
