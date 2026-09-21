@@ -42,7 +42,7 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 |---|---|
 | [claude/](claude/) | `CLAUDE.md`, `RTK.md`, `settings.json` |
 | [agents/](agents/) | les 8 subagents + leur politique de modèles |
-| [skills/](skills/) | `audit-360`, `checkpoint`, `coach-craft`, `evolve` + deux skills design maison |
+| [skills/](skills/) | `audit-360`, `checkpoint`, `coach-craft`, `evolve`, `recall`, `show-me-your-work`, `verify-setup` + deux skills design maison |
 | [hooks/](hooks/) | `context-watch.sh` (contexte + budget cumulé), `big-read-gate.py` (bloque les lectures pleines) |
 | [bin/](bin/) | `import-project.sh`, `audit-tokens.py` (ce que coûtent vraiment les sessions) |
 | [shell/](shell/) | l'extrait de `~/.bashrc` : PATH, seuil de contexte, ssh-agent |
@@ -51,7 +51,7 @@ C'est aussi ce qui rend les devcontainers possibles (voir [docs/devcontainers.md
 ## La doc
 
 - **[docs/comptes.md](docs/comptes.md)** — la config unique : ce qu'elle contient, ce qui vient de `~` par symlink, et l'historique du double compte.
-- **[docs/skills.md](docs/skills.md)** — les skills maison, une ligne chacune, + les externes (graphify).
+- **[docs/skills.md](docs/skills.md)** — les skills maison, une ligne chacune, + les externes (graphify), **et les trois portées de pstack** avec ce qui a été écarté et pourquoi.
 - **[agents/README.md](agents/README.md)** — les subagents et quel modèle chacun tourne.
 - **[docs/design.md](docs/design.md)** — le stack design : impeccable, emil, taste-skill, ui-ux-pro-max — **et lesquels ne pas mélanger**. Porte aussi l'index des repos et outils design évalués, et le mode d'emploi (expérimental).
 - **[docs/plugins.md](docs/plugins.md)** — plugins installés, marketplaces, versions.
