@@ -54,7 +54,7 @@ uniquement, pour les projets produit.
 
 Base de données de design consultable — 84 styles, 192 palettes, 74 pairings de
 polices, 98 règles UX, sur 22 stacks. Ce n'est pas une skill qui décide, c'est un
-oracle. Voir [design.md](design.md) pour sa place dans le stack design et les
+oracle. Voir [design/](design/README.md) pour sa place dans le stack design et les
 combinaisons à éviter. Nécessite Python 3 (stdlib seule).
 
 ## Réglages communs aux deux comptes
@@ -72,7 +72,7 @@ serveurs qui reviennent :
 
 | Serveur | Transport | À quoi |
 |---|---|---|
-| `magic` ([21st.dev](https://21st.dev/)) | stdio, `npx @21st-dev/magic` | bibliothèque de composants React/Tailwind — voir [design.md](design.md) |
+| `magic` ([21st.dev](https://21st.dev/)) | stdio, `npx @21st-dev/magic` | bibliothèque de composants React/Tailwind — voir [design/](design/README.md) |
 | `stripe-test` / `stripe-live` | http, `mcp.stripe.com` | deux entrées, deux clés, jamais confondues |
 | `supabase` | http, `mcp.supabase.com` | base, storage, branching, edge functions |
 | `resend` | stdio, `npx resend-mcp` | emails transactionnels |

@@ -1,5 +1,7 @@
 # Le stack design
 
+> Partie du dossier [design/](README.md) — voir aussi le [processus](processus.md), les [outils](outils.md) et la [recherche](recherche.md).
+
 Quatre skills au noyau, un plugin catalogue, un MCP, deux skills maison — plus
 ce qui a été évalué sans être retenu, rangé dans l'[index](#index--repos-et-outils).
 
@@ -51,7 +53,7 @@ sur la même page.
 | directeur | `impeccable` | par projet — `npx impeccable install` |
 | mouvement | `emil-design-eng` | par projet — `npx skills add emilkowalski/skills --skill emil-design-eng` |
 | audit de fin (a11y, UX, typo) | `web-design-guidelines` | par projet — `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
-| vérification visuelle | [`visual-check`](skills.md) — Playwright en conteneur | niveau user |
+| vérification visuelle | [`visual-check`](../skills.md) — Playwright en conteneur | niveau user |
 | catalogue | skill `ui-ux-pro-max` | plugin user |
 | matériau | MCP `magic` (21st.dev) | `.mcp.json` du projet |
 
@@ -167,8 +169,8 @@ sa propre typo et son propre spacing. Le repasser par `/impeccable polish`.
 
 | Skill | Source | Effet |
 |---|---|---|
-| [`awwwards-motion-site`](../experimental/awwwards-motion-site/) | maison | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D |
-| [`cinematic-scroll-site`](../experimental/cinematic-scroll-site/) | maison | le scroll scrube une caméra pré-rendue — la technique des pages produit Apple |
+| [`awwwards-motion-site`](../../experimental/awwwards-motion-site/) | maison | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, objet 3D |
+| [`cinematic-scroll-site`](../../experimental/cinematic-scroll-site/) | maison | le scroll scrube une caméra pré-rendue — la technique des pages produit Apple |
 
 Équivalence à connaître : `scrollcraft` couvre le même besoin **mais dirige aussi
 le reste**. L'un ou l'autre, jamais les deux.
@@ -177,7 +179,7 @@ le reste**. L'un ou l'autre, jamais les deux.
 
 | Outil | Source | Rôle |
 |---|---|---|
-| [`visual-check`](skills.md), `visual-check-setup` | maison, `~/skills/` | screenshot, erreurs console, clics, Playwright — tout dans un conteneur, rien installé dans le projet |
+| [`visual-check`](../skills.md), `visual-check-setup` | maison, `~/skills/` | screenshot, erreurs console, clics, Playwright — tout dans un conteneur, rien installé dans le projet |
 | MCP `playwright` | `@playwright/mcp` | pilotage navigateur déclaré par projet |
 | `/impeccable live` | impeccable | itère sur le DOM réel, mais pose des hooks qui interceptent les éditions — intrusif |
 
@@ -434,13 +436,13 @@ passer par `/impeccable polish` ou `/impeccable extract` avant de le garder.
 ## Les skills maison
 
 Écrites pour reproduire un effet précis repéré sur un site. Archivées dans
-[`experimental/`](../experimental/) — **pas installées au niveau user** : elles sont trop
+[`experimental/`](../../experimental/) — **pas installées au niveau user** : elles sont trop
 spécifiques pour être always-on, on les copie dans le projet qui en a besoin.
 
 | Skill | Effet | Stack |
 |---|---|---|
-| [`awwwards-motion-site`](../experimental/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, marquees, objet 3D central | Next ou HTML nu + Lenis + GSAP ScrollTrigger + R3F/Spline |
-| [`cinematic-scroll-site`](../experimental/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (la technique des pages produit Apple) — avec `ScrollScrubScene.tsx`, `chapters.ts` et `extract-frames.sh` fournis | Next App Router + Lenis + scrub `<canvas>` |
+| [`awwwards-motion-site`](../../experimental/awwwards-motion-site/) | landing éditoriale : accent unique, typo grotesque XXL, scroll pinné, clip-path reveals, marquees, objet 3D central | Next ou HTML nu + Lenis + GSAP ScrollTrigger + R3F/Spline |
+| [`cinematic-scroll-site`](../../experimental/cinematic-scroll-site/) | le scroll scrube une caméra pré-rendue (la technique des pages produit Apple) — avec `ScrollScrubScene.tsx`, `chapters.ts` et `extract-frames.sh` fournis | Next App Router + Lenis + scrub `<canvas>` |
 
 `cinematic-scroll-site` porte une observation qui vaut le détour : ces sites ne
 sont presque jamais de la 3D temps réel, c'est une vidéo pré-rendue scrubbée par

@@ -7,17 +7,15 @@
 
 # Communication
 
-When reporting information to me, be extremely concise and sacrifice grammar for the sake of concision.
-
-## Vocabulaire (règle permanente)
-
-- **Aucun terme inventé.** N'employer que des mots qui existent déjà : dans le code du projet, dans la doc officielle de l'outil, ou dans le français courant. Pas de nom ni d'acronyme fabriqué pour l'occasion, même « juste pour cette explication ».
-- **Pas de concept là où une phrase suffit.** « Une variable en trop » et pas « une duplication d'état ». Ne pas nommer/théoriser ce qui se décrit directement.
-- **Jargon uniquement s'il est réel et utile** : c'est le terme de l'écosystème (React, git, HTTP, Postgres…) *et* il remplace une périphrase plus longue. Sinon, mot courant.
-- **Pas d'habillage** : pas de métaphores, pas de titres de section inventés, pas de cadres/étapes/catégories pour une réponse de trois lignes.
-- **La réponse d'abord.** Contexte, alternatives, précautions : seulement si demandé, ou si ça change ma décision.
-- Test avant d'envoyer : si un dev qui connaît le projet doit relire une phrase deux fois, elle est à réécrire. Si j'ai créé un mot, le remplacer par ce qu'il voulait dire.
-- Exception : quand je demande explicitement une explication, un cours ou une comparaison, expliquer à fond. La règle vise le déguisement, pas la pédagogie.
+- **Answer first.** Context, alternatives and caveats only when asked, or when they change my decision.
+- **Be extremely concise**, sacrifice grammar for the sake of concision.
+- **No invented terms.** Use only words that already exist: in the project's code, in the tool's official docs, or in everyday language. No name or acronym made up for the occasion, not even "just for this explanation".
+- **No concept where a sentence does the job.** "One variable too many", not "duplicated state". Don't name or theorise what can be described directly.
+- **Jargon only when it is real and useful**: it is the ecosystem's own term (React, git, HTTP, Postgres...) *and* it replaces a longer phrase. Otherwise, plain words.
+- **No dressing up**: no metaphors, no invented section titles, no frames/steps/categories for a three-line answer.
+- **Assume I don't know a concept unless I have used it myself.** If a term is needed and I haven't used it in this project or this conversation, define it in one clause the first time. Never build on a concept you didn't introduce.
+- Check before sending: if a dev who knows the project has to read a sentence twice, rewrite it. If you coined a word, replace it with what it meant.
+- Exception: when I explicitly ask for an explanation, a lesson or a comparison, explain in full. The rule targets disguise, not teaching.
 
 # Commandes (règle permanente, tous projets)
 

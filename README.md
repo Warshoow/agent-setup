@@ -52,7 +52,7 @@ devcontainers possible (see [docs/devcontainers.md](docs/devcontainers.md)).
 - **[docs/comptes.md](docs/comptes.md)**: the single config, what it holds, what comes from `~` by symlink, and the history of the two-account setup.
 - **[docs/skills.md](docs/skills.md)**: the custom skills, one line each, plus the external ones (graphify), **and the three scopes of pstack**, with what was ruled out and why.
 - **[agents/README.md](agents/README.md)**: the subagents and which model each one runs.
-- **[docs/design.md](docs/design.md)**: the design stack (impeccable, emil, taste-skill, ui-ux-pro-max) **and which ones not to mix**. Also indexes the design repos and tools I evaluated, and how to use them (experimental).
+- **[docs/design/](docs/design/README.md)**: everything about design: the process for a non-designer, the tools for each step (Claude Design, extraction, visuals, animation), the sourced research, and the skill stack (impeccable, emil, taste-skill, ui-ux-pro-max) **and which ones not to mix**.
 - **[docs/plugins.md](docs/plugins.md)**: installed plugins, marketplaces, versions.
 - **[docs/hooks.md](docs/hooks.md)**: the three hooks, **and why `context-watch.sh` did not work**.
 - **[docs/couts.md](docs/couts.md)**: what sessions cost, measured from the transcripts. 97% of input is context being resent, 20 sessions make up half the bill, **and why rtk's 60–90% does not hold here**.

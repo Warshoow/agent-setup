@@ -30,7 +30,7 @@ cp -r <ce-repo>/experimental/awwwards-motion-site <projet>/.claude/skills/
 ```
 
 Le reste du stack design (impeccable, emil, taste-skill, ui-ux-pro-max) vit par
-projet — voir [design.md](design.md).
+projet — voir [design/](design/README.md).
 
 `audit-360` et `checkpoint` ont `disable-model-invocation: true` : elles ne se
 déclenchent qu'à la main.
