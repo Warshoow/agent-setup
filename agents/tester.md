@@ -2,6 +2,7 @@
 name: tester
 description: Écriture et maintenance de tests. À utiliser pour couvrir une feature, reproduire un bug par un test, ou augmenter la couverture. Écrit des tests qui vérifient le comportement réel, pas des tests tautologiques.
 model: sonnet
+effort: high
 ---
 
 You write and maintain tests.
