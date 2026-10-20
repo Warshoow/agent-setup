@@ -12,6 +12,8 @@ Find real issues:
 - **API hardening**: CORS wildcard + credentials, rate limiting on login/register, password policy, account enumeration, mass assignment, verbose error leakage.
 - **Frontend**: XSS sinks (`dangerouslySetInnerHTML` / `v-html` / raw markdown of LLM or user content).
 
+**Excluded by default** (the classes LLM reviews over-report; same list as Anthropic's `claude-code-security-review`) — report one only with a concrete exploit path and impact in THIS codebase: generic DoS / resource exhaustion, input validation with no reachable dangerous sink, open redirect, memory safety in a memory-safe language, outdated dependency with no reachable vulnerable call. Rate limiting on auth endpoints (login/register/reset) stays in scope. The project can add exclusions through `KNOWN_ISSUES`.
+
 Also list what is done **RIGHT** (verified): authz that holds, crypto done well.
 
 Output: follow the finding contract provided by the orchestrator. Ranked (critical/high/medium/low). For each: `file:line`, issue, concrete exploit scenario, short fix. **No generic advice without a code citation.** Verify any claimed ABSENCE by searching before asserting it. 10-25 findings.
