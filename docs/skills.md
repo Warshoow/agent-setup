@@ -1,7 +1,7 @@
 # Skills
 
-Source unique : `~/skills/`. Chaque compte y accède par un symlink
-`~/.claude-<compte>/skills/<nom> → ~/skills/<nom>`.
+Source unique : `~/.agents/skills/` (repo privé `~/.agents`). La config y accède par un symlink
+`~/.claude/skills/<nom> → ../../.agents/skills/<nom>`.
 
 ## Maison — versionnées ici
 
@@ -93,11 +93,10 @@ C'est la seule skill référencée nommément dans les deux `CLAUDE.md`.
 
 ### afk-setup
 
-Vit dans le repo [afk.sh](https://github.com/Warshoow/afk.sh), exposée par double symlink :
+Vit dans le repo [afk.sh](https://github.com/Warshoow/afk.sh), exposée par un symlink :
 
 ```
-~/skills/afk-setup                 → ~/afk/skills/afk-setup
-~/.claude/skills/afk-setup   → ~/skills/afk-setup
+~/.claude/skills/afk-setup   → ~/afk/skills/afk-setup
 ```
 
 Écrit le `.afk.env` d'un projet : la porte de vérification qui définit ce que

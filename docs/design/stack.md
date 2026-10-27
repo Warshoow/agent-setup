@@ -179,7 +179,7 @@ le reste**. L'un ou l'autre, jamais les deux.
 
 | Outil | Source | Rôle |
 |---|---|---|
-| [`visual-check`](../skills.md), `visual-check-setup` | maison, `~/skills/` | screenshot, erreurs console, clics, Playwright — tout dans un conteneur, rien installé dans le projet |
+| [`visual-check`](../skills.md), `visual-check-setup` | maison, `~/.agents/skills/` | screenshot, erreurs console, clics, Playwright — tout dans un conteneur, rien installé dans le projet |
 | MCP `playwright` | `@playwright/mcp` | pilotage navigateur déclaré par projet |
 | `/impeccable live` | impeccable | itère sur le DOM réel, mais pose des hooks qui interceptent les éditions — intrusif |
 
@@ -631,7 +631,7 @@ choisir **un**, et ne pas repasser l'autre dessus après coup.
 
 ## Comment c'est installé
 
-**Par projet, pas au niveau user** — contrairement aux skills de `~/skills/`.
+**Par projet, pas au niveau user** — contrairement aux skills de `~/.agents/skills/`.
 Raison simple : elles écrivent un état (`DESIGN.md`, `.impeccable/`) qui
 appartient au repo. Seul `ui-ux-pro-max` est un plugin user, parce qu'il ne
 persiste rien.

@@ -1,6 +1,6 @@
 ---
 name: evolve
-description: Promouvoir les patterns récurrents de la mémoire persistante vers leur bonne destination — une skill dans ~/skills/ si on l'invoque, une règle CLAUDE.md si c'est un réflexe permanent, ou l'enrichissement d'une skill/d'un agent existant. Relit les mémoires de tous les projets (configs pro et perso), détecte les feedbacks/procédures revenus plusieurs fois, propose (validation explicite avant toute création). Trigger : /evolve, « promeus mes mémoires », « qu'est-ce qui mériterait de devenir une skill ? ».
+description: Promouvoir les patterns récurrents de la mémoire persistante vers leur bonne destination — une skill dans ~/.agents/skills/ si on l'invoque, une règle CLAUDE.md si c'est un réflexe permanent, ou l'enrichissement d'une skill/d'un agent existant. Relit les mémoires de tous les projets (configs pro et perso), détecte les feedbacks/procédures revenus plusieurs fois, propose (validation explicite avant toute création). Trigger : /evolve, « promeus mes mémoires », « qu'est-ce qui mériterait de devenir une skill ? ».
 ---
 
 # Evolve — instinct → skill
@@ -26,7 +26,7 @@ il ne manque que la promotion.
      fait ou une préférence ponctuelle ;
    - **cross-projet** : si c'est spécifique à un projet, la destination est le
      CLAUDE.md de ce projet — le proposer comme tel, pas comme skill.
-   Écarter ce qui est déjà couvert : `ls ~/skills/` + skills et agents listés
+   Écarter ce qui est déjà couvert : `ls ~/.agents/skills/` + skills et agents listés
    dans la session. En cas de recouvrement partiel, proposer d'**enrichir**
    l'existant plutôt que de créer un doublon.
 
@@ -38,10 +38,10 @@ il ne manque que la promotion.
    solide = le dire et s'arrêter là.
 
 4. **Promotion.** Selon la destination retenue :
-   - **skill** : créer `~/skills/<nom>/SKILL.md` — frontmatter `name` +
+   - **skill** : créer `~/.agents/skills/<nom>/SKILL.md` — frontmatter `name` +
      `description` (les triggers vivent dans la description), corps concis :
      quand, procédure, exemples concrets tirés des mémoires sources ; puis
-     symlinker : `ln -sfn ~/skills/<nom> ~/.claude/skills/<nom>`.
+     symlinker : `ln -sfn ../../.agents/skills/<nom> ~/.claude/skills/<nom>`.
    - **règle CLAUDE.md** (global ou projet) : une section courte, des exemples
      tirés des mémoires sources. C'est la bonne destination pour un réflexe
      permanent — quelque chose qu'on n'invoque jamais mais qui doit toujours

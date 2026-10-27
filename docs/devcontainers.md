@@ -1,6 +1,6 @@
 # Devcontainers
 
-Le setup repose sur des symlinks `~/.claude/…  →  ~/{agents,skills}`. Dans un
+Le setup repose sur des symlinks `~/.claude/…  →  ~/.agents/…`. Dans un
 conteneur, ces cibles n'existent pas : **les liens sont morts et les agents/skills
 disparaissent silencieusement**.
 
@@ -11,8 +11,9 @@ Extrait du `devcontainer.json` du projet qui sert de référence aux autres :
 ```jsonc
 "mounts": [
   // Cibles réelles des symlinks ~/.claude/skills/* (sinon liens morts dans le conteneur).
-  "source=${localEnv:HOME}/skills,target=${localEnv:HOME}/skills,type=bind,readonly",
-  "source=${localEnv:HOME}/agents,target=${localEnv:HOME}/agents,type=bind,readonly",
+  "source=${localEnv:HOME}/.agents,target=${localEnv:HOME}/.agents,type=bind,readonly",
+  // Seul endroit où un conteneur écrit : le log Laya.
+  "source=${localEnv:HOME}/.agents/laya,target=${localEnv:HOME}/.agents/laya,type=bind",
   "source=${localEnv:HOME}/.claude,target=${localEnv:HOME}/.claude,type=bind",
   "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind",
   "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,readonly",
@@ -29,10 +30,10 @@ Extrait du `devcontainer.json` du projet qui sert de référence aux autres :
 
 Trois points qui comptent :
 
-1. **`target` == `source`** pour `skills` et `agents`. Pas `/home/node/skills` :
-   le symlink pointe vers le `$HOME` de l'hôte en dur, il faut ce
-   chemin-là dans le conteneur.
-2. **`readonly`** sur les sources partagées — un conteneur ne réécrit pas mes skills.
+1. **`target` == `source`** pour `.agents`. Pas `/home/node/.agents` :
+   `~/.claude` est monté au chemin de l'hôte, et ses liens relatifs
+   (`../.agents/…`) doivent retomber sur ce même chemin dans le conteneur.
+2. **`readonly`** sur `~/.agents` — un conteneur ne réécrit pas mes skills, agents, hooks ni instructions. Seul `~/.agents/laya` est en écriture.
 3. **`remoteEnv.CLAUDE_CONFIG_DIR`** est obligatoire ici, alors qu'il n'est plus
    posé sur l'hôte : le `$HOME` du conteneur (`/home/node`) n'est pas celui où la
    config est montée, donc le défaut `~/.claude` tomberait à côté. Le monter sur

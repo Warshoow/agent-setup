@@ -10,27 +10,34 @@ variable à poser, plus de bascule à faire.
 ├── settings.json      modèle, hooks, statusline, plugins
 ├── .credentials.json  OAuth Claude + OAuth des serveurs MCP
 ├── .claude.json       identité du compte, état par projet
-├── agents  ──symlink──►  ~/agents
-├── skills/<nom> ─symlink►  ~/skills/<nom>
+├── CLAUDE.md, RTK.md, statusline.sh, rules, laya  ─symlink─►  ~/.agents/…
+├── agents  ──symlink──►  ~/.agents/agents
+├── skills/<nom> ─symlink►  ~/.agents/skills/<nom>
 ├── projects/<slug>/   sessions + mémoire, un dossier par cwd
 └── plugins/           marketplaces + cache
 ```
 
-## Ce qui vient de `~`, par symlink
+## Ce qui vient de `~/.agents`, par symlink
 
 ```
-~/.claude/agents        → ~/agents
-~/.claude/skills/<nom>  → ~/skills/<nom>
+~/.claude/{CLAUDE.md,RTK.md,statusline.sh,rules}  → ~/.agents/claude/…
+~/.claude/laya                                    → ~/.agents/laya
+~/.claude/agents                                  → ~/.agents/agents
+~/.claude/skills/<nom>                            → ~/.agents/skills/<nom>
 ```
 
-Une seule copie de chaque asset, éditée à un seul endroit. Plus, de fait :
-`~/hooks/context-watch.sh` (pointé par `settings.json`), `~/.gitconfig`,
-`~/.ssh`, le binaire `claude` lui-même.
+`~/.agents` est un repo git privé : une seule copie de chaque asset, éditée à un
+seul endroit, poussée sur GitHub, réinstallée par `~/.agents/install.sh`. Les hooks
+sont appelés à `$HOME/.agents/hooks/…` depuis `settings.json`.
+
+`settings.json` reste un vrai fichier dans `~/.claude` (Claude Code, Orca et Coucou
+écrivent dedans) ; le repo en garde une copie sans les hooks propres à la machine.
 
 ## `CLAUDE_CONFIG_DIR`
 
-La variable existe toujours côté Claude Code, mais n'est plus posée dans
-`~/.bashrc`. Elle reste **obligatoire dans les devcontainers** : le `$HOME` du
+Posée en haut de `~/.bashrc`, avant la garde « shell interactif », pour que les
+shells de login non interactifs l'aient aussi (sans elle, Claude Code lit
+`~/.claude.json` au lieu de `~/.claude/.claude.json`). Elle reste **obligatoire dans les devcontainers** : le `$HOME` du
 conteneur (`/home/node`) n'est pas celui où la config de l'hôte est montée. Voir
 [devcontainers.md](devcontainers.md).
 

@@ -125,7 +125,7 @@ Gère les commandes composées (`cd x && cat gros.py`) et les préfixes
 `sudo`/`time`/`env`/`rtk`.
 
 ```bash
-~/hooks/big-read-gate.py --test     # 19 assertions, ~1 s
+~/.agents/hooks/big-read-gate.py --test     # 19 assertions, ~1 s
 export BIG_READ_MAX=500             # pour remonter le seuil
 ```
 
@@ -139,7 +139,7 @@ JSON
 claude -p "ok" --settings /tmp/probe.json < /dev/null
 
 # 2. si oui, tracer le vrai script sur le payload capturé
-sed '2a exec 2>>/tmp/trace.log; set -x' ~/hooks/context-watch.sh > /tmp/t.sh && chmod +x /tmp/t.sh
+sed '2a exec 2>>/tmp/trace.log; set -x' ~/.agents/hooks/context-watch.sh > /tmp/t.sh && chmod +x /tmp/t.sh
 /tmp/t.sh < /tmp/hook-in.log
 ```
 
@@ -148,7 +148,7 @@ Le `< /dev/null` compte : sans lui, `claude -p` attend 3 s sur stdin et pollue l
 Pour un `PreToolUse`, le payload se fabrique à la main :
 
 ```bash
-echo '{"tool_name":"Bash","tool_input":{"command":"cat gros.py"}}' | ~/hooks/big-read-gate.py; echo "exit=$?"
+echo '{"tool_name":"Bash","tool_input":{"command":"cat gros.py"}}' | ~/.agents/hooks/big-read-gate.py; echo "exit=$?"
 ```
 
 `exit 2` = bloqué, stderr renvoyé au modèle. `exit 0` = laissé passer.

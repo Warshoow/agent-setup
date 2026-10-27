@@ -8,8 +8,12 @@ READERS = {"cat", "head", "tail", "sed"}
 
 
 def nlines(p):
+    """0 pour un binaire (image, pdf...) : ses \\n ne sont pas des lignes."""
     try:
         with open(p, "rb") as f:
+            if b"\0" in f.read(2048):
+                return 0
+            f.seek(0)
             return sum(1 for _ in f)
     except OSError:
         return 0
@@ -81,8 +85,10 @@ def verdict(tool_name, ti):
 
 def _test():
     big, small = "/tmp/_brg_big.txt", "/tmp/_brg_small.txt"
+    binf = "/tmp/_brg_bin.png"
     open(big, "w").write("x\n" * 400)
     open(small, "w").write("x\n" * 10)
+    open(binf, "wb").write(b"\x89PNG\r\n\x1a\n\0\0\0\rIHDR" + b"\n" * 400)
     T = lambda c: verdict("Bash", {"command": c})
     assert verdict("Read", {"file_path": big})
     assert not verdict("Read", {"file_path": big, "offset": 10})
@@ -103,7 +109,9 @@ def _test():
     assert not T(f"grep foo {big}")
     assert not T("git status")
     assert not T(f"python3 - <<EOF\ncat {big}\nEOF")
-    for f in (big, small):
+    assert not verdict("Read", {"file_path": binf}), "binaire = pas une lecture pleine"
+    assert not T(f"cat {binf}")
+    for f in (big, small, binf):
         os.remove(f)
     print("ok")
 

@@ -4,7 +4,8 @@ A record of my **Claude Code** setup on WSL: a single config, custom agents and
 skills, hooks, plugins, and the tooling around them (rtk, graphify, afk).
 
 This repo is a **documented archive**, not an installer. It exists so I know what
-I had and why, if the machine goes.
+I had and why. The live config is a private repo cloned at `~/.agents`, with its
+own `install.sh`; this one is a cleaned-up copy of it.
 
 Project names and personal paths have been removed, so the config files have to
 be put back together by hand, not copied as they are. The docs under `docs/` are
@@ -14,25 +15,29 @@ in French.
 
 ```
 ~/
-├── .claude/                full Claude Code config
-│     │                          (sessions, memory, plugins, creds)
-│     ├── CLAUDE.md               global instructions
-│     ├── RTK.md                  @-imported by CLAUDE.md
-│     ├── settings.json           model, hooks, statusline, plugins
-│     ├── agents  ──symlink──►  ~/agents
-│     ├── skills/<name> ─symlink► ~/skills/<name>
+├── .claude/                Claude Code config (sessions, memory, plugins, creds)
+│     ├── settings.json           real file (Claude Code, Orca, Coucou write it)
+│     ├── CLAUDE.md, RTK.md, statusline.sh, rules  ─symlink─► ~/.agents/claude/…
+│     ├── laya     ─symlink─► ~/.agents/laya
+│     ├── agents   ─symlink─► ~/.agents/agents
+│     ├── skills/<name> ─symlink─► ~/.agents/skills/<name>
 │     └── skills/graphify         (installed by the skill itself)
 │
-├── agents/                 SINGLE SOURCE of the 8 user-level subagents
-├── skills/                 SINGLE SOURCE of the custom skills
-├── hooks/                  context-watch.sh (Stop) + big-read-gate.py (PreToolUse)
+├── .agents/                SINGLE SOURCE, private git repo
+│     ├── skills/                 custom skills (+ 3 from Orca/Vercel)
+│     ├── agents/                 the 8 user-level subagents
+│     ├── hooks/                  context-watch.sh (Stop) + big-read-gate.py (PreToolUse)
+│     ├── mods/                   local plugin marketplace (Claude Code mods)
+│     ├── claude/                 CLAUDE.md, RTK.md, statusline.sh, rules/, settings.json (copy without machine hooks)
+│     ├── laya/                   decision log + scripts
+│     └── install.sh              rebuilds all of the above on a new machine
 ├── afk/                    separate repo → github.com/Warshoow/afk.sh
 ├── projects-perso/         personal projects
 └── projects-pro/           work projects
 ```
 
-The idea: **one copy of each asset in `~`**, exposed to the config through a
-symlink. Edit `~/agents/planner.md` and Claude Code sees it. It is also what makes
+The idea: **one copy of each asset, in `~/.agents`**, exposed to the config through a
+symlink. Edit `~/.agents/agents/planner.md` and Claude Code sees it. It is also what makes
 devcontainers possible (see [docs/devcontainers.md](docs/devcontainers.md)).
 
 ## What is in this repo
@@ -72,11 +77,15 @@ devcontainers possible (see [docs/devcontainers.md](docs/devcontainers.md)).
 
 ## Rebuilding the machine, roughly
 
-1. `claude login` (the config lands in `~/.claude`).
-2. Plugins come back on their own at first launch (`extraKnownMarketplaces` + `enabledPlugins`).
-3. Reinstall `rtk`, `graphify` (`uv tool install graphifyy`) and `afk` (separate repo).
-4. Recreate the symlinks `~/.claude/{agents,skills}` → `~/{agents,skills}`.
-5. Source [`shell/bashrc-claude.sh`](shell/bashrc-claude.sh) from `~/.bashrc`.
+With the private repo: `git clone … ~/.agents && ~/.agents/install.sh`, then `claude`.
+It creates the symlinks, seeds `settings.json`, installs claude/uv/rtk, clones `afk`,
+and reinstalls the plugins. Run it before the first `claude` launch.
+
+From this public copy, by hand:
+1. Put `agents/`, `skills/`, `hooks/` and `claude/` under `~/.agents/` and recreate the symlinks above.
+2. `claude login`; reinstall the plugins listed in `settings.json` (`claude plugin install …`).
+3. Install `rtk`, `graphify` (`uv tool install graphifyy`) and `afk` (separate repo).
+4. Source [`shell/bashrc-claude.sh`](shell/bashrc-claude.sh) from `~/.bashrc`.
 
 ## Persistent memory
 
