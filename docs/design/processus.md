@@ -337,7 +337,7 @@ Pour chacun : où, pourquoi, correction précise. Pas de note sur 100.
 1. **Éprouver A à la main** sur une refonte réelle : positionnement d'abord, puis
    références et trois directions dans Claude Design. Intention notée dans
    `~/notes/adcom-design.md`.
-2. **Template web** (`app-factory/templates/web`) : `DESIGN.md` et `PRODUCT.md` à
+2. **Template web** (`app-templates/templates/web`) : `DESIGN.md` et `PRODUCT.md` à
    remplir, impeccable et emil installés, `DESIGN.md` cité dans `CLAUDE.md`,
    `visual-check` branché, critères vérifiables de B dans la gate.
 3. **`/afk-spec`** — repo public, donc un changement générique : si un `DESIGN.md`
